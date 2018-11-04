@@ -56,3 +56,6 @@ config :wow, Wow.Repo,
   database: "wow_dev",
   hostname: "database",
   pool_size: 10
+
+# Toniq
+config :toniq, redis_url: "redis://localhost:6379/0"

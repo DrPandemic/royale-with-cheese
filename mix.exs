@@ -43,7 +43,10 @@ defmodule Wow.Mixfile do
       {:cowboy, "~> 1.0"},
       {:plug_cowboy, "~> 1.0"},
       {:exredis, ">= 0.2.4"},
-      {:toniq, "~> 1.0"}
+      {:toniq, "~> 1.0"},
+      {:tesla, "~> 1.2.0"},
+      {:hackney, "~> 1.14.0"},
+      {:jason, ">= 1.0.0"}
     ]
   end
 

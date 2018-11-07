@@ -58,4 +58,4 @@ config :wow, Wow.Repo,
   pool_size: 10
 
 # Toniq
-config :toniq, redis_url: "redis://localhost:6379/0"
+config :toniq, redis_url: "redis://redis:6379/0"

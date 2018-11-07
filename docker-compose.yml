@@ -18,6 +18,8 @@ services:
     ports:
       - 4000:4000
     command: ["mix", "phx.server"]
+    env_file:
+        - blizzard.env
 
   database:
     image: postgres:latest

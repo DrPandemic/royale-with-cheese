@@ -4,7 +4,7 @@ defmodule Wow.AuctionEntry do
   @primary_key {:id, :id, autogenerate: true}
 
   schema "auction_entry" do
-    field :auc_id, :string
+    field :auc_id, :integer
     field :bid, :integer
     field :item, :integer
     field :owner, :string

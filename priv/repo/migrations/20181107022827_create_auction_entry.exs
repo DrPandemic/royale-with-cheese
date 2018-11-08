@@ -3,17 +3,17 @@ defmodule Wow.Repo.Migrations.CreateAuctionEntry do
 
   def change do
     create table(:auction_entry) do
-      add :auc_id, :string, null: false
-      add :bid, :integer, null: false
-      add :item, :integer, null: false
+      add :auc_id, :bigint, null: false
+      add :bid, :bigint, null: false
+      add :item, :bigint, null: false
       add :owner, :string, null: false
       add :owner_realm, :string, null: false
-      add :buyout, :integer, null: false
-      add :quantity, :integer, null: false
+      add :buyout, :bigint, null: false
+      add :quantity, :bigint, null: false
       add :time_left, :string, null: false
-      add :rand, :integer, null: false
-      add :seed, :integer, null: false
-      add :context, :integer, null: false
+      add :rand, :bigint, null: false
+      add :seed, :bigint, null: false
+      add :context, :bigint, null: false
       add :dump_timestamp, :utc_datetime, null: false
 
       timestamps()

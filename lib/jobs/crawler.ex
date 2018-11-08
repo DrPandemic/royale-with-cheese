@@ -11,5 +11,7 @@ defmodule Jobs.Crawler do
       "url" => url
     }]} = Wow.Crawler.get_url(token, region, realm)
     dump = Wow.Crawler.get_dump(url)
+
+    IO.puts "Done #{realm}"
   end
 end

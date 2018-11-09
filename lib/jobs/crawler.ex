@@ -12,9 +12,11 @@ defmodule Jobs.Crawler do
     }]} = Wow.Crawler.get_url(token, region, realm)
     %{"auctions" => auctions} = Wow.Crawler.get_dump(url)
 
-    IO.puts "Done #{realm}"
+    IO.puts "Received #{realm}"
 
     auctions |> Enum.map(fn e -> create_entry(e, last_modified) end) |> Enum.each(&Wow.Repo.insert/1)
+
+    IO.puts "Done #{realm}"
   end
 
   def create_entry(auction, timestamp) do
@@ -31,6 +33,6 @@ defmodule Jobs.Crawler do
       seed: auction["seed"],
       context: auction["context"],
       dump_timestamp: timestamp |> DateTime.from_unix!(:millisecond) |> DateTime.truncate(:second)
-    }
+    } |> Wow.AuctionEntry.changeset
   end
 end

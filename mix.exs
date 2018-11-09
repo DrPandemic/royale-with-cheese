@@ -10,7 +10,8 @@ defmodule Wow.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [plt_add_deps: :transitive]
     ]
   end
 
@@ -46,7 +47,8 @@ defmodule Wow.MixProject do
       {:exredis, ">= 0.2.4"},
       {:toniq, "~> 1.0"},
       {:tesla, "~> 1.2.0"},
-      {:hackney, "~> 1.14.0"}
+      {:hackney, "~> 1.14.0"},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false}
     ]
   end
 

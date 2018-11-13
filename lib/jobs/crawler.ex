@@ -1,5 +1,5 @@
 defmodule Jobs.Crawler do
-  use Toniq.Worker
+  use Toniq.Worker, max_concurrency: 1
 
   @spec perform([{:region, String.t} | {:realm, String.t}]) :: :ok
   def perform(region: region, realm: realm) do

@@ -3,10 +3,10 @@ defmodule Wow.Crawler do
   @access_token_url "https://us.battle.net/oauth/token"
 
   @spec get_access_token(String.t, String.t) :: String.t
-  def get_access_token(id, secret, module \\ Tesla) do
-    client = module.client(middlewares_basic_auth(id, secret))
+  def get_access_token(id, secret) do
+    client = Tesla.client(middlewares_basic_auth(id, secret))
     mp = Multipart.new |> Multipart.add_field("grant_type", "client_credentials")
-    case module.post(
+    case Tesla.post(
       client,
       @access_token_url,
       mp
@@ -17,9 +17,9 @@ defmodule Wow.Crawler do
   end
 
   @spec get_url(String.t, String.t, String.t) :: %{lastModified: integer, url: String.t}
-  def get_url(access_token, region, realm, module \\ Tesla) do
-    client = module.client(middlewares())
-    case module.get(
+  def get_url(access_token, region, realm) do
+    client = Tesla.client(middlewares())
+    case Tesla.get(
       client,
       "https://#{region}.api.blizzard.com/wow/auction/data/#{realm}?locale=en_US&access_token=#{access_token}"
     ) do
@@ -29,9 +29,9 @@ defmodule Wow.Crawler do
   end
 
   @spec get_dump(String.t) :: %{auctions: list(Wow.AuctionEntry.raw_entry)}
-  def get_dump(url, module \\ Tesla) do
-    client = module.client(middlewares())
-    case module.get(
+  def get_dump(url) do
+    client = Tesla.client(middlewares())
+    case Tesla.get(
       client,
       url
     ) do
@@ -42,21 +42,34 @@ defmodule Wow.Crawler do
 
   @spec middlewares() :: list
   defp middlewares() do
-    [
-      Tesla.Middleware.DecodeJson,
-      Tesla.Middleware.Compression,
-      {Tesla.Middleware.Headers, [{"Accept-Encoding", "gzip"}]}
-    ]
+    if Mix.env == :test do
+      [
+        Tesla.Middleware.DecodeJson,
+      ]
+    else
+      [
+        Tesla.Middleware.DecodeJson,
+        Tesla.Middleware.Compression,
+        {Tesla.Middleware.Headers, [{"Accept-Encoding", "gzip"}]}
+      ]
+    end
   end
 
   @spec middlewares_basic_auth(String.t, String.t) :: list
   defp middlewares_basic_auth(id, secret) do
+    if Mix.env == :test do
     [
       {Tesla.Middleware.BasicAuth, %{username: id, password: secret}},
       Tesla.Middleware.DecodeJson,
-      Tesla.Middleware.Compression,
-      {Tesla.Middleware.Headers, [{"Accept-Encoding", "gzip"}]}
     ]
+    else
+      [
+        {Tesla.Middleware.BasicAuth, %{username: id, password: secret}},
+        Tesla.Middleware.DecodeJson,
+        Tesla.Middleware.Compression,
+        {Tesla.Middleware.Headers, [{"Accept-Encoding", "gzip"}]}
+      ]
+    end
   end
 
   @spec string_key_map(map) :: map

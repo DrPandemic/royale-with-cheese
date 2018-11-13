@@ -1,0 +1,88 @@
+[
+  {
+    "request": {
+      "body": "{&Tesla.Adapter.Shared.next_chunk/1, #Function<26.51129937/1 in Stream.do_transform/5>}",
+      "headers": {
+        "authorization": "***",
+        "content-type": "multipart/form-data; boundary=rzdck97wHEvA11DA9Tk86oQ1fY3NMSH"
+      },
+      "method": "post",
+      "options": {
+        "transfer_encoding": "chunked"
+      },
+      "request_body": "",
+      "url": "https://us.battle.net/oauth/token"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"access_token\":\"token\",\"token_type\":\"bearer\",\"expires_in\":86399}",
+      "headers": {
+        "Date": "Tue, 13 Nov 2018 01:04:55 GMT",
+        "Server": "Apache",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Retry-After": "600",
+        "Cache-Control": "no-store",
+        "Pragma": "no-cache",
+        "Vary": "Accept-Encoding",
+        "Transfer-Encoding": "chunked",
+        "Content-Type": "application/json;charset=UTF-8"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://us.api.blizzard.com/wow/auction/data/medivh?locale=en_US&access_token=token"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"files\":[{\"url\":\"http://auction-api-us.worldofwarcraft.com/auction-data/abc123/auctions.json\",\"lastModified\":1542063959000}]}",
+      "headers": {
+        "Date": "Tue, 13 Nov 2018 01:04:55 GMT",
+        "Server": "Apache-Coyote/1.1",
+        "Last-Modified": "Mon, 12 Nov 2018 23:05:59 GMT",
+        "Content-Type": "application/json;charset=UTF-8",
+        "Content-Language": "en-US",
+        "transfer-encoding": "chunked",
+        "x-frame-options": "SAMEORIGIN",
+        "X-Content-Type-Options": "nosniff",
+        "connection": "keep-alive"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "http://auction-api-us.worldofwarcraft.com/auction-data/abc123/auctions.json"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\r\n\"realms\": [\r\n\t{\"name\":\"Medivh\",\"slug\":\"medivh\"},\r\n\t{\"name\":\"Exodar\",\"slug\":\"exodar\"}],\r\n\"auctions\": [\r\n\t{\"auc\":1845718536,\"item\":24086,\"owner\":\"foo\",\"ownerRealm\":\"Medivh\",\"bid\":124325195,\"buyout\":124325195,\"quantity\":1,\"timeLeft\":\"LONG\",\"rand\":0,\"seed\":0,\"context\":0},\r\n\t{\"auc\":1845718547,\"item\":112321,\"owner\":\"Bar\",\"ownerRealm\":\"Exodar\",\"bid\":101496,\"buyout\":101496,\"quantity\":1,\"timeLeft\":\"LONG\",\"rand\":0,\"seed\":0,\"context\":0}]\r\n}",
+      "headers": {
+        "Date": "Tue, 13 Nov 2018 01:04:56 GMT",
+        "Server": "Apache",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Last-Modified": "Mon, 12 Nov 2018 23:05:59 GMT",
+        "ETag": "\"123-123\"",
+        "Accept-Ranges": "bytes",
+        "Content-Length": "7108489",
+        "Vary": "Accept-Encoding",
+        "Content-Type": "application/json"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

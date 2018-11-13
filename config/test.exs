@@ -12,7 +12,7 @@ config :logger, level: :warn
 # Configure your database
 config :wow, Wow.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "password",
   database: "wow_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

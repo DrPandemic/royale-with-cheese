@@ -11,7 +11,10 @@ defmodule Wow.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      dialyzer: [plt_add_deps: :transitive]
+      dialyzer: [plt_add_deps: :transitive],
+      preferred_cli_env: [
+        vcr: :test, "vcr.delete": :test, "vcr.check": :test, "vcr.show": :test
+      ],
     ]
   end
 
@@ -47,8 +50,9 @@ defmodule Wow.MixProject do
       {:exredis, ">= 0.2.4"},
       {:toniq, "~> 1.0"},
       {:tesla, "~> 1.2.0"},
-      {:hackney, "~> 1.14.0"},
-      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false}
+      {:ibrowse, "~> 4.4.1"},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
+      {:exvcr, "~> 0.10", only: :test}
     ]
   end
 

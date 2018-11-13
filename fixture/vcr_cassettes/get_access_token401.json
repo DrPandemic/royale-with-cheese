@@ -1,0 +1,34 @@
+[
+  {
+    "request": {
+      "body": "{&Tesla.Adapter.Shared.next_chunk/1, #Function<26.51129937/1 in Stream.do_transform/5>}",
+      "headers": {
+        "authorization": "***",
+        "content-type": "multipart/form-data; boundary=6aSUgJuTz0FEsYLXECvzXmD7TNgmkLr5"
+      },
+      "method": "post",
+      "options": {
+        "transfer_encoding": "chunked"
+      },
+      "request_body": "",
+      "url": "https://us.battle.net/oauth/token"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"error\":\"unauthorized\",\"error_description\":\"Bad credentials\"}",
+      "headers": {
+        "Date": "Tue, 13 Nov 2018 01:02:38 GMT",
+        "Server": "Apache",
+        "X-Frame-Options": "SAMEORIGIN",
+        "Retry-After": "600",
+        "Cache-Control": "no-store",
+        "Pragma": "no-cache",
+        "WWW-Authenticate": "Bearer realm=\"Blizzard OAuth\", error=\"unauthorized\", error_description=\"Bad credentials\"",
+        "Transfer-Encoding": "chunked",
+        "Content-Type": "application/json;charset=UTF-8"
+      },
+      "status_code": 401,
+      "type": "ok"
+    }
+  }
+]

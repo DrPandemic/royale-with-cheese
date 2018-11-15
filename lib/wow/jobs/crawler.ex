@@ -17,7 +17,7 @@ defmodule Wow.Jobs.Crawler do
 
     auctions
     |> Enum.map(fn e -> Wow.AuctionEntry.from_raw(e, last_modified) end)
-    |> Enum.chunk_every(5000)
+    |> Enum.chunk_every(500)
     |> Enum.each(&insert/1)
 
     IO.puts "Done #{realm}"

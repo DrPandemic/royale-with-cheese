@@ -1,4 +1,4 @@
-FROM elixir:latest
+FROM arm32v7/elixir:latest
 
 RUN mkdir src
 WORKDIR src

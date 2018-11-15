@@ -66,6 +66,16 @@ config :logger, level: :info
 # Note you can't rely on `System.get_env/1` when using releases.
 # See the releases documentation accordingly.
 
-# Finally import the config/prod.secret.exs which should be versioned
-# separately.
-import_config "prod.secret.exs"
+# Configure your database
+config :wow, Wow.Repo,
+  username: "postgres",
+  password: "password",
+  database: "wow_prod",
+  hostname: "database",
+  pool_size: 10
+
+# Toniq
+config :toniq, redis_url: "redis://redis:6379/0"
+
+config :wow, WowWeb.Endpoint,
+  secret_key_base: System.get_env("SECRET_KEY_BASE")

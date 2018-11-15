@@ -1,4 +1,4 @@
-defmodule Jobs.Crawler do
+defmodule Wow.Jobs.Crawler do
   use Toniq.Worker, max_concurrency: 1
 
   @spec perform([{:region, String.t} | {:realm, String.t}]) :: :ok
@@ -15,10 +15,21 @@ defmodule Jobs.Crawler do
 
     IO.puts "Received #{realm}"
 
-    auctions |> Enum.map(fn e -> Wow.AuctionEntry.from_raw(e, last_modified) end) |> Enum.each(&Wow.Repo.insert/1)
+    auctions
+    |> Enum.map(fn e -> Wow.AuctionEntry.from_raw(e, last_modified) end)
+    |> Enum.chunk_every(5000)
+    |> Enum.each(&insert/1)
 
     IO.puts "Done #{realm}"
 
     :ok
+  end
+
+  @spec insert(auctions: [Wow.AuctionEntry]) :: none()
+  defp insert(auctions) do
+    Wow.Repo.checkout(fn ->
+      IO.puts("Tick")
+      auctions |> Enum.each(&Wow.Repo.insert/1)
+    end)
   end
 end

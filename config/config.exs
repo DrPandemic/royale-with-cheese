@@ -31,3 +31,10 @@ import_config "#{Mix.env()}.exs"
 
 # Tesla
 config :tesla, :adapter, Tesla.Adapter.Ibrowse
+
+# Quantum
+config :wow, Wow.Scheduler,
+  jobs: [
+    # Every minute
+    {"0 * * * *",      fn -> Wow.Jobs.Scheduler.schedule() end},
+  ]

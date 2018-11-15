@@ -52,7 +52,9 @@ defmodule Wow.MixProject do
       {:tesla, "~> 1.2.0"},
       {:ibrowse, "~> 4.4.1"},
       {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
-      {:exvcr, "~> 0.10", only: :test}
+      {:exvcr, "~> 0.10", only: :test},
+      {:quantum, "~> 2.3"},
+      {:timex, "~> 3.0"}
     ]
   end
 

@@ -11,9 +11,10 @@ defmodule Wow.Application do
       # Start the Ecto repository
       Wow.Repo,
       # Start the endpoint when the application starts
-      WowWeb.Endpoint
+      WowWeb.Endpoint,
       # Starts a worker by calling: Wow.Worker.start_link(arg)
       # {Wow.Worker, arg},
+      Wow.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

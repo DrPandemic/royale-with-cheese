@@ -69,10 +69,10 @@ config :phoenix, :plug_init_mode, :runtime
 # Configure your database
 config :wow, Wow.Repo,
   username: "postgres",
-  password: System.get_env("POSTGRES_PASSWORD"),
+  password: "password",
   database: "wow_dev",
   hostname: "localhost",
   pool_size: 10
 
 # Toniq
-config :toniq, redis_url: "redis://redis:#{System.get_env("REDIS_PASSWORD")}@redis:6379/0"
+config :toniq, redis_url: "redis://redis:6379/0"

@@ -16,3 +16,6 @@ config :wow, Wow.Repo,
   database: "wow_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Toniq
+config :toniq, redis_url: "redis://redis:6379/1"

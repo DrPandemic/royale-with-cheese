@@ -69,13 +69,13 @@ config :logger, level: :info
 # Configure your database
 config :wow, Wow.Repo,
   username: "postgres",
-  password: "password",
+  password: System.get_env("POSTGRES_PASSWORD"),
   database: "wow_prod",
   hostname: "database",
   pool_size: 10
 
 # Toniq
-config :toniq, redis_url: "redis://redis:6379/0"
+config :toniq, redis_url: "redis://redis:#{System.get_env("REDIS_PASSWORD")}@redis:6379/0"
 
 config :wow, WowWeb.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE")

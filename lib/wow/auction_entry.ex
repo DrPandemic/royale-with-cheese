@@ -24,15 +24,21 @@ defmodule Wow.AuctionEntry do
     timestamps()
   end
 
+  @spec create_entry(map) :: t
+  def create_entry(attrs \\ %{}) do
+    %Wow.AuctionEntry{}
+    |> changeset(attrs)
+    |> Wow.Repo.insert()
+  end
+
   @spec changeset(Wow.AuctionEntry.t, map) :: Ecto.Changeset.t
-  def changeset(entry, params \\ %{}) do
+  def changeset(%Wow.AuctionEntry{} = entry, params \\ %{}) do
     entry
-    |> cast(params, [:auc_id, :bid, :item, :owner, :owner_realm, :buyout, :quantity, :time_left, :rand, :seed, :context,
-                    :dump_timestamp]
-    )
-    |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :buyout, :quantity, :time_left, :rand, :seed,
-                         :context, :dump_timestamp]
-    )
+    |> cast(params, [:auc_id, :bid, :item, :owner, :owner_realm, :buyout, :quantity, :time_left,
+                    :rand, :seed, :context, :dump_timestamp])
+    |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :buyout, :quantity, :time_left,
+                         :rand, :seed, :context, :dump_timestamp])
+    |> validate_inclusion(:time_left, ["SHORT", "MEDIUM", "LONG", "VERY LONG"])
     |> unique_constraint(:auc_id_dump_timestamp)
   end
 

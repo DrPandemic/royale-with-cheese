@@ -1,6 +1,6 @@
 defmodule Wow.Jobs.Scheduler do
 
-  @spec schedule([{:region, String.t} | {:realm, String.t}]) :: :ok
+  @spec schedule() :: :ok
   def schedule(toniq \\ Toniq) do
     [
       [region: "eu", realm: "kazzak"],

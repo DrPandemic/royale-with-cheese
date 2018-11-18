@@ -25,7 +25,7 @@ defmodule Wow.Jobs.Crawler do
     :ok
   end
 
-  @spec insert(auctions: [Wow.AuctionEntry]) :: none()
+  @spec insert(auctions: [Wow.AuctionEntry]) :: any()
   defp insert(auctions) do
     Wow.Repo.checkout(fn ->
       IO.puts("Tick")

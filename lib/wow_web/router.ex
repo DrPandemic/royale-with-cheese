@@ -17,6 +17,7 @@ defmodule WowWeb.Router do
     pipe_through :browser
 
     get "/", HomeController, :index
+    get "/items", ItemController, :show
   end
 
   # Other scopes may use custom stacks.

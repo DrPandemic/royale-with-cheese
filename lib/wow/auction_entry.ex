@@ -1,5 +1,6 @@
 defmodule Wow.AuctionEntry do
   use Ecto.Schema
+  import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
   @type raw_entry :: %{optional(String.t) => String.t}
@@ -7,6 +8,8 @@ defmodule Wow.AuctionEntry do
 
   @primary_key {:id, :id, autogenerate: true}
 
+  @derive {Jason.Encoder, only: [:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout,
+    :quantity, :time_left, :rand, :seed, :context, :dump_timestamp]}
   schema "auction_entry" do
     field :auc_id, :integer
     field :bid, :integer
@@ -43,7 +46,7 @@ defmodule Wow.AuctionEntry do
     |> unique_constraint(:auc_id_dump_timestamp)
   end
 
-  @spec from_raw(raw_entry, integer, String) :: t
+  @spec from_raw(raw_entry, integer, String.t) :: t
   def from_raw(auction, timestamp, region) do
     %Wow.AuctionEntry{
       auc_id: auction["auc"],
@@ -60,5 +63,15 @@ defmodule Wow.AuctionEntry do
       context: auction["context"],
       dump_timestamp: timestamp |> DateTime.from_unix!(:millisecond) |> DateTime.truncate(:second)
     } |> changeset
+  end
+
+  @spec find_by_item_id(integer, String.t, String.t) :: [t]
+  def find_by_item_id(item_id, region, realm) do
+    query = from entry in Wow.AuctionEntry,
+      where: entry.item == ^item_id
+        and entry.owner_realm == ^realm
+        and entry.region == ^region
+
+    Wow.Repo.all(query)
   end
 end

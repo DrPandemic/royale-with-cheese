@@ -1,23 +1,23 @@
 <div>
   <h1>Search</h1>
-  <form action="" method="get">
+  <form action="/items" method="get">
     <div>
       <label for="region">Region</label>
-      <select id="region">
+      <select id="region" name="region">
         <option value="eu">EU</option>
         <option value="us">US</option>
       </select>
     </div>
     <div>
       <label for="realm">Realm</label>
-      <select id="realm">
-        <option value="medivh">Medivh</option>
-        <option value="kazzak">Kazzak</option>
+      <select id="realm" name="realm">
+        <option value="Medivh">Medivh</option>
+        <option value="Kazzak">Kazzak</option>
       </select>
     </div>
     <div>
-      <label for="item">Item ID</label>
-      <input type="text" name="item" id="item" required>
+      <label for="item_id">Item ID</label>
+      <input type="text" name="item_id" id="item_id" required>
     </div>
     <div>
       <input type="submit" value="Search">

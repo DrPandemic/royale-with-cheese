@@ -71,7 +71,7 @@ config :wow, Wow.Repo,
   username: "postgres",
   password: "password",
   database: "wow_dev",
-  hostname: "localhost",
+  hostname: "database",
   pool_size: 10
 
 # Toniq

@@ -1,4 +1,4 @@
-defmodule WowWeb.PageController do
+defmodule WowWeb.HomeController do
   use WowWeb, :controller
 
   def index(conn, _params) do

@@ -3,7 +3,7 @@ defmodule Wow.Jobs.Crawler do
 
   @spec perform([{:region, String.t} | {:realm, String.t}]) :: :ok
   def perform(region: region, realm: realm) do
-    IO.puts "Starting #{realm}"
+    IO.puts "Starting #{region} - #{realm}"
     id = System.get_env("BLIZZARD_CLIENT_ID")
     secret = System.get_env("BLIZZARD_CLIENT_SECRET")
     token = Wow.Crawler.get_access_token(id, secret)
@@ -16,7 +16,7 @@ defmodule Wow.Jobs.Crawler do
     IO.puts "Received #{realm}"
 
     auctions
-    |> Enum.map(fn e -> Wow.AuctionEntry.from_raw(e, last_modified) end)
+    |> Enum.map(fn e -> Wow.AuctionEntry.from_raw(e, last_modified, region) end)
     |> Enum.chunk_every(500)
     |> Enum.each(&insert/1)
 

@@ -1,0 +1,26 @@
+<div>
+  <h1>Search</h1>
+  <form action="" method="get">
+    <div>
+      <label for="region">Region</label>
+      <select id="region">
+        <option value="eu">EU</option>
+        <option value="us">US</option>
+      </select>
+    </div>
+    <div>
+      <label for="realm">Realm</label>
+      <select id="realm">
+        <option value="medivh">Medivh</option>
+        <option value="kazzak">Kazzak</option>
+      </select>
+    </div>
+    <div>
+      <label for="item">Item ID</label>
+      <input type="text" name="item" id="item" required>
+    </div>
+    <div>
+      <input type="submit" value="Search">
+    </div>
+  </form>
+</div>

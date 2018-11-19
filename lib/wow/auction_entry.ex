@@ -13,6 +13,7 @@ defmodule Wow.AuctionEntry do
     field :item, :integer
     field :owner, :string
     field :owner_realm, :string
+    field :region, :string
     field :buyout, :integer
     field :quantity, :integer
     field :time_left, :string
@@ -34,22 +35,23 @@ defmodule Wow.AuctionEntry do
   @spec changeset(Wow.AuctionEntry.t, map) :: Ecto.Changeset.t
   def changeset(%Wow.AuctionEntry{} = entry, params \\ %{}) do
     entry
-    |> cast(params, [:auc_id, :bid, :item, :owner, :owner_realm, :buyout, :quantity, :time_left,
-                    :rand, :seed, :context, :dump_timestamp])
-    |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :buyout, :quantity, :time_left,
-                         :rand, :seed, :context, :dump_timestamp])
+    |> cast(params, [:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
+                    :time_left, :rand, :seed, :context, :dump_timestamp])
+                    |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
+                                         :time_left, :rand, :seed, :context, :dump_timestamp])
     |> validate_inclusion(:time_left, ["SHORT", "MEDIUM", "LONG", "VERY LONG"])
     |> unique_constraint(:auc_id_dump_timestamp)
   end
 
-  @spec from_raw(raw_entry, integer) :: t
-  def from_raw(auction, timestamp) do
+  @spec from_raw(raw_entry, integer, String) :: t
+  def from_raw(auction, timestamp, region) do
     %Wow.AuctionEntry{
       auc_id: auction["auc"],
       bid: auction["bid"],
       item: auction["item"],
       owner: auction["owner"],
       owner_realm: auction["ownerRealm"],
+      region: region,
       buyout: auction["buyout"],
       quantity: auction["quantity"],
       time_left: auction["timeLeft"],

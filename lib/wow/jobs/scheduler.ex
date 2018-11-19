@@ -4,6 +4,8 @@ defmodule Wow.Jobs.Scheduler do
   def schedule(toniq \\ Toniq) do
     [
       [region: "eu", realm: "kazzak"],
+      [region: "us", realm: "kazzak"],
+      [region: "eu", realm: "medivh"],
       [region: "us", realm: "medivh"],
     ]
     |> Enum.each(fn (info) -> toniq.enqueue(Wow.Jobs.Crawler, info) end)

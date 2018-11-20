@@ -2,7 +2,9 @@ version: '3'
 
 services:
   web:
-    image: drpandemic/royale-with-cheese-web:arm
+    build:
+      context: ./
+      dockerfile: Dockerfile-arm
     tty: true
     ports:
       - 4000:4000

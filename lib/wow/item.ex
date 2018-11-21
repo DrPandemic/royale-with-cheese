@@ -1,4 +1,5 @@
 defmodule Wow.Item do
+  alias Wow.Repo
   use Ecto.Schema
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
@@ -22,7 +23,7 @@ defmodule Wow.Item do
   def create_item(attrs \\ %{}) do
     %Wow.Item{}
     |> changeset(attrs)
-    |> Wow.Repo.insert()
+    |> Repo.insert()
   end
 
   @spec changeset(t, map) :: Ecto.Changeset.t
@@ -51,6 +52,20 @@ defmodule Wow.Item do
     query = from entry in Wow.Item,
       where: entry.item == ^item_id
 
-    Wow.Repo.one(query)
+    Repo.one(query)
+  end
+
+  @spec find_missing_items() :: [integer]
+  def find_missing_items do
+    query = from e in Wow.AuctionEntry,
+      distinct: e.item,
+      left_join: i in Wow.Item,
+      on: i.id == e.item,
+      where: is_nil(i.id),
+      select: {e.item}
+
+    query
+    |> Repo.all
+    |> Enum.map(fn({id}) -> id end)
   end
 end

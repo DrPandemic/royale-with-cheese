@@ -40,8 +40,20 @@ defmodule Wow.Crawler do
     end
   end
 
+  @spec get_item(String.t, integer) :: any
+  def get_item(access_token, item_id) do
+    client = Tesla.client(middlewares())
+    case Tesla.get(
+          client,
+          "https://us.api.blizzard.com/wow/item/#{item_id}?locale=en_US&access_token=#{access_token}"
+        ) do
+      {:ok, %Tesla.Env{status: 200, body: body}} ->
+        body
+    end
+  end
+
   @spec middlewares() :: list
-  defp middlewares() do
+  defp middlewares do
     if Mix.env == :test do
       [
         Tesla.Middleware.DecodeJson,

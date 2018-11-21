@@ -1,4 +1,5 @@
 defmodule Wow.AuctionEntry do
+  alias Wow.Repo
   use Ecto.Schema
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
@@ -32,7 +33,7 @@ defmodule Wow.AuctionEntry do
   def create_entry(attrs \\ %{}) do
     %Wow.AuctionEntry{}
     |> changeset(attrs)
-    |> Wow.Repo.insert()
+    |> Repo.insert()
   end
 
   @spec changeset(Wow.AuctionEntry.t, map) :: Ecto.Changeset.t
@@ -72,6 +73,6 @@ defmodule Wow.AuctionEntry do
         and entry.owner_realm == ^realm
         and entry.region == ^region
 
-    Wow.Repo.all(query)
+    Repo.all(query)
   end
 end

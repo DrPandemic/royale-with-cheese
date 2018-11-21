@@ -13,6 +13,6 @@ defmodule Wow.Repo.Migrations.CreateItem do
       timestamps()
     end
 
-    create index("item", ["name text_pattern_ops"], name: :name_text_pattern_index)
+    create index("item", ["(to_tsvector('english', name))"], name: :name_text_gin_index, using: "GIN")
   end
 end

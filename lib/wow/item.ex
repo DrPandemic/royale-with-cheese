@@ -7,7 +7,7 @@ defmodule Wow.Item do
   @type raw_entry :: %{optional(String.t) => String.t}
   @type t :: Ecto.Schema.t
 
-  @derive {Jason.Encoder, only: []}
+  @derive {Jason.Encoder, only: [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable]}
   schema "item" do
     field :name, :string
     field :icon, :string
@@ -31,7 +31,7 @@ defmodule Wow.Item do
     entry
     |> cast(params, [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable, :blob])
     |> validate_required([:id, :name, :icon, :buy_price, :sell_price, :is_auctionable, :blob])
-    |> unique_constraint(:item_name_index)
+    |> unique_constraint(:item_name_gin_index)
   end
 
   @spec from_raw(raw_entry) :: t
@@ -67,5 +67,14 @@ defmodule Wow.Item do
     query
     |> Repo.all
     |> Enum.map(fn({id}) -> id end)
+  end
+
+  @spec find_similar_to_name(String.t) :: [t]
+  def find_similar_to_name(item_name) do
+    query = from i in Wow.Item,
+      order_by: fragment("similarity(name, ?) DESC", ^String.downcase(item_name)),
+      limit: 10
+
+    Repo.all(query)
   end
 end

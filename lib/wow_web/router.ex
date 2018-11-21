@@ -18,7 +18,6 @@ defmodule WowWeb.Router do
 
     get "/", HomeController, :index
     get "/items", ItemController, :show
-    get "/items/find", ItemController, :find
   end
 
   # Other scopes may use custom stacks.

@@ -1,2 +1,3 @@
 <h1>Item</h1>
-<%= Jason.encode!(@items) %>
+<%= Jason.encode!(@item) %>
+<%= Jason.encode!(@entries) %>

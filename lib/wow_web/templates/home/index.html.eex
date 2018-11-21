@@ -16,8 +16,8 @@
       </select>
     </div>
     <div>
-      <label for="item_id">Item ID</label>
-      <input type="text" name="item_id" id="item_id" required>
+      <label for="item_name">Item's name</label>
+      <input type="text" name="item_name" id="item_name" required>
     </div>
     <div>
       <input type="submit" value="Search">

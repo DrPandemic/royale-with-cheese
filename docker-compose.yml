@@ -15,7 +15,11 @@ services:
         - MIX_ENV=prod
 
   database:
-    image: postgres:latest
+    image: sameersbn/postgresql:latest
+    environment:
+      - PG_PASSWORD="${POSTGRES_PASSWORD}"
+      - DB_NAME=wow_prod
+      - DB_EXTENSION=pg_trgm
     env_file:
         - .env
     ports:

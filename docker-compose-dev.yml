@@ -16,9 +16,11 @@ services:
       - MIX_ENV=dev
 
   database:
-    image: postgres:latest
+    image: sameersbn/postgresql:latest
     environment:
-      - POSTGRES_PASSWORD=password
+      - PG_PASSWORD=password
+      - DB_NAME=wow_dev
+      - DB_EXTENSION=pg_trgm
     ports:
       - 5432:5432
 

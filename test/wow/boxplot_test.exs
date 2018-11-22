@@ -37,7 +37,7 @@ defmodule Wow.BoxplotTest do
 
     assert result.min == 1
     assert Kernel.trunc(result.max) == 3288
-    assert result.median == 11
+    assert result.median == 13
     assert result.lower_quartile == 2
     assert result.upper_quartile == 223
   end

@@ -20,7 +20,7 @@ defmodule Wow.Boxplot do
     %{
       min: sorted |> Enum.min,
       max: sorted |> Enum.max,
-      median: sorted |> Statistics.median,
+      median: sorted |> percentile(50),
       lower_quartile: sorted |> percentile(25),
       upper_quartile: sorted |> percentile(75)
     }

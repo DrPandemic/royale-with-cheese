@@ -2,6 +2,8 @@ defmodule Wow.Repo.Migrations.CreateItem do
   use Ecto.Migration
 
   def change do
+    execute("CREATE EXTENSION pg_trgm")
+
     create table(:item) do
       add :name, :string, null: false
       add :icon, :string, null: false

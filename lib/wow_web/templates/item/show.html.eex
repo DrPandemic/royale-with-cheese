@@ -1,4 +1,9 @@
-<h1>Item</h1>
-<%= Jason.encode!(@item) %>
+<h1>
+  <img src="https://render-us.worldofwarcraft.com/icons/56/<%= @item.icon %>.jpg"/>
+  <%= @item.name %>
+</h1>
+<p>
+  <%= Enum.sum(Enum.map(@entries, fn(e) -> length(e) end)) %> auction entries were analyzed.
+</p>
 
 <div id="boxplotChart" data-entries="<%= Jason.encode!(@entries) %>"></div>

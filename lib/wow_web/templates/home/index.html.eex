@@ -1,26 +1,3 @@
 <div>
-  <h1>Search</h1>
-  <form action="/items" method="get">
-    <div>
-      <label for="region">Region</label>
-      <select id="region" name="region">
-        <option value="eu">EU</option>
-        <option value="us">US</option>
-      </select>
-    </div>
-    <div>
-      <label for="realm">Realm</label>
-      <select id="realm" name="realm">
-        <option value="Medivh">Medivh</option>
-        <option value="Kazzak">Kazzak</option>
-      </select>
-    </div>
-    <div>
-      <label for="item_name">Item's name</label>
-      <input type="text" name="item_name" id="item_name" required>
-    </div>
-    <div>
-      <input type="submit" value="Search">
-    </div>
-  </form>
+  <h1>Something clever to say here</h1>
 </div>

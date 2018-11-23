@@ -6,16 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Royale with Cheese</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   </head>
   <body>
     <header class="header">
       <nav role="navigation">
-        <ul class="nav nav-pills pull-right">
-          <i class="fab fa-github"></i>
-          <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
-        </ul>
+        <div></div>
+        <div class="search">
+          <form class="header-form" action="/items" method="get">
+            <div>
+              <select id="region" name="region">
+                <option value="eu">EU</option>
+                <option value="us">US</option>
+              </select>
+            </div>
+            <div>
+              <select id="realm" name="realm">
+                <option value="Kazzak">Kazzak</option>
+                <option value="Medivh">Medivh</option>
+              </select>
+            </div>
+            <div>
+              <input type="text" name="item_name" id="item_name" placeholder="Object's name" required>
+            </div>
+            <div>
+              <input type="submit" value="Search">
+            </div>
+          </form>
+        </div>
+        <div>
+          <a href="https://github.com/DrPandemic/royale-with-cheese">
+            <i class="fab fa-github fa-2x"></i>
+          </a>
+        </div>
       </nav>
-      <span class="logo"></span>
     </header>
     <main role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

@@ -67,6 +67,6 @@ function percentile(list, n) {
 
 export const layout = {
   yaxis: {
-    title: 'Price in gold',
+    title: 'Price in gold per unit',
   },
 }

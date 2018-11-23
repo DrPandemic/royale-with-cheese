@@ -7,12 +7,12 @@ defmodule Wow.Boxplot do
     median: integer(),
     lower_quartile: integer(),
     upper_quartile: integer(),
+    count: integer(),
+    timestamp: Calendar.datetime(),
   }
 
-  @spec boxplot([], (any(), any() -> integer())) :: :err
-  def boxplot([], _) do
-    :err
-  end
+  @spec boxplot([], (any(), any() -> integer())) :: nil
+  def boxplot([], _) do nil end
 
   @spec boxplot([%AuctionEntry{}, ...], (any(), any() -> integer())) :: boxplot_entry()
   def boxplot(entries, sorter) do
@@ -22,18 +22,20 @@ defmodule Wow.Boxplot do
       max: sorted |> Enum.max,
       median: sorted |> percentile(50),
       lower_quartile: sorted |> percentile(25),
-      upper_quartile: sorted |> percentile(75)
+      upper_quartile: sorted |> percentile(75),
+      count: length(sorted),
+      timestamp: hd(entries).dump_timestamp
     }
   end
 
   # Adapted from https://github.com/msharp/elixir-statistics/blob/a71ea4b1091dbe9a4993e0b4cbde3fbb303e0243/lib/statistics.ex#L181
-  @spec percentile(list, number) :: number
+  @spec percentile(list, number) :: integer
   def percentile([], _), do: nil
   def percentile([x], _), do: x
   def percentile(list, 0), do: Enum.min(list)
   def percentile(list, 100), do: Enum.max(list)
   def percentile(list, n) when is_list(list) and is_number(n) do
-    r = n / 100.0 * Enum.count(list)
+    r = n / 100.0 * length(list)
     f = r |> Float.ceil |> Kernel.trunc
     if Kernel.trunc(r) != f do
       Enum.at(list, f)
@@ -42,5 +44,6 @@ defmodule Wow.Boxplot do
       upper = Enum.at(list, f - 1)
       (lower + upper) / 2
     end
+    |> trunc
   end
 end

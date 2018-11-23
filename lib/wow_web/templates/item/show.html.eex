@@ -1,3 +1,4 @@
 <h1>Item</h1>
 <%= Jason.encode!(@item) %>
-<%= Jason.encode!(@entries) %>
+
+<div id="boxplotChart" data-entries="<%= Jason.encode!(@entries) %>"></div>

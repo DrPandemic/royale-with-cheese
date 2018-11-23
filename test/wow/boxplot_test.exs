@@ -29,7 +29,8 @@ defmodule Wow.BoxplotTest do
     assert Kernel.trunc(result.max) == 3288
     assert result.median == 12
     assert result.lower_quartile == 2
-    assert Kernel.trunc(result.upper_quartile) == 211
+    assert result.upper_quartile == 211
+    assert result.count == 16
   end
 
   test "boxplot extracts the right values for an odd number of elements" do
@@ -40,6 +41,7 @@ defmodule Wow.BoxplotTest do
     assert result.median == 13
     assert result.lower_quartile == 2
     assert result.upper_quartile == 223
+    assert result.count == 15
   end
 
   test "boxplot extracts the right values for one element" do
@@ -50,5 +52,6 @@ defmodule Wow.BoxplotTest do
     assert result.median == 20
     assert result.lower_quartile == 20
     assert result.upper_quartile == 20
+    assert result.count == 1
   end
 end

@@ -1,5 +1,5 @@
 <h1>
-  <img src="https://render-us.worldofwarcraft.com/icons/56/<%= @item.icon %>.jpg"/>
+  <img src="<%= Routes.static_path(@conn, "/images/blizzard/icons/36/#{@item.icon}.jpg") %>"/>
   <%= @item.name %>
 </h1>
 <p>

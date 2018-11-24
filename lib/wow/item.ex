@@ -77,4 +77,14 @@ defmodule Wow.Item do
 
     Repo.all(query)
   end
+
+  @spec find_distinct_icons :: [String.t]
+  def find_distinct_icons do
+    query = from i in Wow.Item,
+      distinct: i.icon,
+      select: i.icon
+
+    query
+    |> Repo.all
+  end
 end

@@ -1,3 +1,4 @@
+import moment from 'moment';
 const outlierTreshold = 0.5;
 
 export function boxplot7D(entries) {
@@ -21,25 +22,30 @@ export function boxplot7D(entries) {
       return dataNoOutiliers;
     }
     return val;
-  }).map((val, i) => ({
-    y: val,
-    name: ((entries[i] || [])[0] || {dump_timestamp: ''}).dump_timestamp,
-    boxpoints: 'all',
-    jitter: 0.3,
-    pointpos: -1.5,
-    type: 'box',
-    line: {
-      width: 0.5
-    },
-    marker: {
-      color: 'rgb(8,81,156)',
-      outliercolor: 'rgba(215, 40, 40, 0.1)',
+  }).map((val, i) => {
+    if (val.length === 0) {
+      return null;
+    }
+    return {
+      y: val,
+      name: moment.utc(entries[i][0].dump_timestamp).format("MMM D Y"),
+      boxpoints: 'all',
+      jitter: 0.3,
+      pointpos: -1.5,
+      type: 'box',
       line: {
+        width: 0.5
+      },
+      marker: {
+        color: 'rgb(8,81,156)',
         outliercolor: 'rgba(215, 40, 40, 0.1)',
-        outlierwidth: 20
+        line: {
+          outliercolor: 'rgba(215, 40, 40, 0.1)',
+          outlierwidth: 20
+        }
       }
-    },
-  }));
+    };
+  }).filter(d => d);
 }
 
 function removeOutliers(data) {

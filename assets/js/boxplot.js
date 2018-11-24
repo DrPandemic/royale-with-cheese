@@ -49,19 +49,22 @@ export function boxplot7D(entries) {
 }
 
 function removeOutliers(data) {
-  data.sort();
+  if (data.length === 0) {
+    return data;
+  }
+  data.sort((a, b) => a - b);
 
   const median = percentile(data, 50);
   const q1 = percentile(data, 25);
   const q3 = percentile(data, 75);
-  const iqr = Math.max(q3 - q1, median / 10) * 1.5;
+  const iqr = (q3 - q1) * 1.5;
 
   return data.filter(e => e > q1 - iqr && e < q3 + iqr);
 }
 
 function percentile(list, n) {
   const r = n / 100 * list.length;
-  const f = Math.ceil(r);
+  const f = Math.min(Math.max(Math.ceil(r), 0), list.length - 1);
   if (Math.floor(r) !== f) {
     return list[f];
   } else {

@@ -71,17 +71,57 @@ defmodule Wow.AuctionEntry do
     } |> changeset
   end
 
-  @spec find_by_item_id(integer, String.t, String.t) :: [t]
+  @spec find_by_item_id(integer, String.t, String.t) :: [Wow.AuctionEntry.Subset]
   def find_by_item_id(item_id, region, realm) do
-    query = from entry in Wow.AuctionEntry,
+    query =from entry in Wow.AuctionEntry,
       where: entry.item == ^item_id
-        and entry.owner_realm == ^realm
-        and entry.region == ^region,
+    and entry.owner_realm == ^realm
+    and entry.region == ^region,
       select: {min(entry.dump_timestamp), entry.buyout, entry.quantity},
       group_by: [:buyout, :quantity]
 
     query
     |> Repo.all
     |> Enum.map(fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2)} end)
+  end
+
+  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer) :: [t]
+  def find_by_item_id_with_sampling(item_id, region, realm, max) do
+    query_count = from entry in Wow.AuctionEntry,
+      where: entry.item == ^item_id
+    and entry.owner_realm == ^realm
+    and entry.region == ^region,
+      select: count(entry.auc_id)
+
+    count = Repo.one(query_count)
+
+    if count <= max do
+      %{
+        initial_count: count,
+        data: find_by_item_id(item_id, region, realm)
+      }
+    else
+      percent = 100 * (max / count)
+      # I would like to use a fragment here.
+      query = "SELECT MIN(dump_timestamp), quantity, buyout
+      FROM auction_entry
+      TABLESAMPLE BERNOULLI ($4) REPEATABLE (42)
+      WHERE item = $1
+      AND region = $2
+      AND owner_realm = $3
+      GROUP BY auc_id, quantity, buyout"
+
+      result = case Repo.query!(query, [item_id, region, realm, percent]) do
+        %Postgrex.Result{rows: rows} ->
+          Enum.map(rows, fn([dump, buyout, quantity]) ->
+            %Wow.AuctionEntry.Subset{dump_timestamp: dump, buyout: buyout, quantity: quantity}
+          end)
+      end
+
+      %{
+        initial_count: count,
+        data: result
+      }
+    end
   end
 end

@@ -1,4 +1,9 @@
 defmodule Wow.AuctionEntry do
+  defmodule Subset do
+    @derive {Jason.Encoder, only: [:dump_timestamp, :quantity, :buyout]}
+    defstruct dump_timestamp: nil, quantity: 0, buyout: 0
+  end
+
   alias Wow.Repo
   use Ecto.Schema
   import Ecto.Query, only: [from: 2]
@@ -71,8 +76,12 @@ defmodule Wow.AuctionEntry do
     query = from entry in Wow.AuctionEntry,
       where: entry.item == ^item_id
         and entry.owner_realm == ^realm
-        and entry.region == ^region
+        and entry.region == ^region,
+      select: {min(entry.dump_timestamp), entry.buyout, entry.quantity},
+      group_by: [:buyout, :quantity]
 
-    Repo.all(query)
+    query
+    |> Repo.all
+    |> Enum.map(fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2)} end)
   end
 end

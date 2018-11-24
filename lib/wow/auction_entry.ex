@@ -2,6 +2,18 @@ defmodule Wow.AuctionEntry do
   defmodule Subset do
     @derive {Jason.Encoder, only: [:dump_timestamp, :quantity, :buyout]}
     defstruct dump_timestamp: nil, quantity: 0, buyout: 0
+
+    @spec tuple_to_subset([[]]) :: [%Wow.AuctionEntry.Subset{}]
+    def list_to_subset(result) do
+      Enum.map(result, fn([dump, buyout, quantity]) ->
+        %Wow.AuctionEntry.Subset{dump_timestamp: dump, buyout: buyout, quantity: quantity}
+      end)
+    end
+
+    @spec tuple_to_subset([[]]) :: [%Wow.AuctionEntry.Subset{}]
+    def tuple_to_subset(result) do
+      Enum.map(result, fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2)} end)
+    end
   end
 
   alias Wow.Repo
@@ -82,7 +94,7 @@ defmodule Wow.AuctionEntry do
 
     query
     |> Repo.all
-    |> Enum.map(fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2)} end)
+    |> Wow.AuctionEntry.Subset.tuple_to_subset
   end
 
   @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer) :: [t]
@@ -98,6 +110,7 @@ defmodule Wow.AuctionEntry do
     if count <= max do
       %{
         initial_count: count,
+        sampled: false,
         data: find_by_item_id(item_id, region, realm)
       }
     else
@@ -112,14 +125,12 @@ defmodule Wow.AuctionEntry do
       GROUP BY auc_id, quantity, buyout"
 
       result = case Repo.query!(query, [item_id, region, realm, percent]) do
-        %Postgrex.Result{rows: rows} ->
-          Enum.map(rows, fn([dump, buyout, quantity]) ->
-            %Wow.AuctionEntry.Subset{dump_timestamp: dump, buyout: buyout, quantity: quantity}
-          end)
+        %Postgrex.Result{rows: rows} -> rows |> Wow.AuctionEntry.Subset.list_to_subset
       end
 
       %{
         initial_count: count,
+        sampled: true,
         data: result
       }
     end

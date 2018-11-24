@@ -3,7 +3,10 @@
   <%= @item.name %>
 </h1>
 <p>
-  <%= Enum.sum(Enum.map(@entries, fn(e) -> length(e) end)) %> auction entries were analyzed.
+  <%= length(@entries.data) %> auction entries were analyzed.
+  <%= if @entries.sampled do %>
+  They were randomly sampled from <%= @entries.initial_count %> entries.
+  <% end %>
 </p>
 
 <div id="boxplotChart" data-entries="<%= Jason.encode!(@entries) %>"></div>

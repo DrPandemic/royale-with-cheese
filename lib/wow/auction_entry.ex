@@ -116,7 +116,7 @@ defmodule Wow.AuctionEntry do
     else
       percent = 100 * (max / count)
       # I would like to use a fragment here.
-      query = "SELECT MIN(dump_timestamp), quantity, buyout
+      query = "SELECT MIN(dump_timestamp), buyout, quantity
       FROM auction_entry
       TABLESAMPLE BERNOULLI ($4) REPEATABLE (42)
       WHERE item = $1

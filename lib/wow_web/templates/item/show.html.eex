@@ -9,4 +9,12 @@
   <% end %>
 </p>
 
+<div>
+  <label for="graph_type">Duration</label>
+  <select id="graph_type" name="graph_type">
+    <option value="1d">1 day</option>
+    <option value="7d">7 days</option>
+    <option value="30d">30 days</option>
+  </select>
+</div>
 <div id="boxplotChart" data-entries="<%= Jason.encode!(@entries) %>"></div>

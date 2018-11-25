@@ -1,7 +1,7 @@
 import moment from 'moment';
 const outlierTreshold = 0.5;
 
-export function boxplot7D(entries) {
+export function boxplot7D(entries, format) {
   let data = [];
   for (const i in entries) {
     if (!data[i]) {
@@ -17,7 +17,7 @@ export function boxplot7D(entries) {
 
   return data.map(val => {
     const dataNoOutiliers = removeOutliers(val);
-    // Prevent the outlier detection to remove everything. This is an issue the que pet cage
+    // Prevent the outlier detection from removing everything. This is an issue the que pet cage
     if (dataNoOutiliers.length > val.length * outlierTreshold) {
       return dataNoOutiliers;
     }
@@ -28,7 +28,7 @@ export function boxplot7D(entries) {
     }
     return {
       y: val,
-      name: moment.utc(entries[i][0].dump_timestamp).format("MMM D Y"),
+      name: moment.utc(entries[i][0].dump_timestamp).format(format),
       boxpoints: 'all',
       jitter: 0.3,
       pointpos: -1.5,

@@ -31,7 +31,7 @@ defmodule Wow.Item do
     entry
     |> cast(params, [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable, :blob])
     |> validate_required([:id, :name, :icon, :buy_price, :sell_price, :is_auctionable, :blob])
-    |> unique_constraint(:item_name_gin_index)
+    |> unique_constraint(:item_item_name_gin_index_index)
   end
 
   @spec from_raw(raw_entry) :: t

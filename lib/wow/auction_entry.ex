@@ -114,24 +114,11 @@ defmodule Wow.AuctionEntry do
         data: find_by_item_id(item_id, region, realm)
       }
     else
-      percent = 100 * (max / count)
-      # I would like to use a fragment here.
-      query = "SELECT MIN(dump_timestamp), buyout, quantity
-      FROM auction_entry
-      TABLESAMPLE BERNOULLI ($4) REPEATABLE (42)
-      WHERE item = $1
-      AND region = $2
-      AND owner_realm = $3
-      GROUP BY auc_id, quantity, buyout"
-
-      result = case Repo.query!(query, [item_id, region, realm, percent]) do
-        %Postgrex.Result{rows: rows} -> rows |> Wow.AuctionEntry.Subset.list_to_subset
-      end
-
+      :rand.seed(:exsplus, {1, 2, 3})
       %{
         initial_count: count,
         sampled: true,
-        data: result
+        data: find_by_item_id(item_id, region, realm) |> Enum.take_random(max)
       }
     end
   end

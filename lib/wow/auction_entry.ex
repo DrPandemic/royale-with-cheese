@@ -61,7 +61,7 @@ defmodule Wow.AuctionEntry do
                     |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
                                          :time_left, :rand, :seed, :context, :dump_timestamp])
     |> validate_inclusion(:time_left, ["SHORT", "MEDIUM", "LONG", "VERY LONG"])
-    |> unique_constraint(:auc_id_dump_timestamp)
+    |> unique_constraint(:auc_id_dump_timestamp_owner_realm_region)
   end
 
   @spec from_raw(raw_entry, integer, String.t) :: t

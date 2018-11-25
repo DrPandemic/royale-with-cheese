@@ -34,7 +34,7 @@
             </div>
           </form>
         </div>
-        <div>
+        <div class="right">
           <a href="https://github.com/DrPandemic/royale-with-cheese">
             <i class="fab fa-github fa-2x"></i>
           </a>

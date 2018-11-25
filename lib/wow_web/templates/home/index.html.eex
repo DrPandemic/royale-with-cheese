@@ -1,3 +1,5 @@
-<div>
-  <h1>Something clever to say here</h1>
+<div class="home-container">
+  <div>
+    <h1>Something clever to say here</h1>
+  </div>
 </div>

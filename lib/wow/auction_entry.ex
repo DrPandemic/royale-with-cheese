@@ -83,12 +83,13 @@ defmodule Wow.AuctionEntry do
     } |> changeset
   end
 
-  @spec find_by_item_id(integer, String.t, String.t) :: [Wow.AuctionEntry.Subset]
-  def find_by_item_id(item_id, region, realm) do
-    query =from entry in Wow.AuctionEntry,
+  @spec find_by_item_id(integer, String.t, String.t, NaiveDateTime.t) :: [Wow.AuctionEntry.Subset]
+  defp find_by_item_id(item_id, region, realm, start_date) do
+    query = from entry in Wow.AuctionEntry,
       where: entry.item == ^item_id
     and entry.owner_realm == ^realm
-    and entry.region == ^region,
+    and entry.region == ^region
+    and entry.dump_timestamp > ^start_date,
       select: {min(entry.dump_timestamp), entry.buyout, entry.quantity},
       group_by: [:buyout, :quantity]
 
@@ -97,29 +98,13 @@ defmodule Wow.AuctionEntry do
     |> Wow.AuctionEntry.Subset.tuple_to_subset
   end
 
-  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer) :: [t]
-  def find_by_item_id_with_sampling(item_id, region, realm, max) do
-    query_count = from entry in Wow.AuctionEntry,
-      where: entry.item == ^item_id
-    and entry.owner_realm == ^realm
-    and entry.region == ^region,
-      select: count(entry.auc_id)
-
-    count = Repo.one(query_count)
-
-    if count <= max do
-      %{
-        initial_count: count,
-        sampled: false,
-        data: find_by_item_id(item_id, region, realm)
-      }
-    else
-      :rand.seed(:exsplus, {1, 2, 3})
-      %{
-        initial_count: count,
-        sampled: true,
-        data: find_by_item_id(item_id, region, realm) |> Enum.take_random(max)
-      }
-    end
+  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer, NaiveDateTime.t) :: [t]
+  def find_by_item_id_with_sampling(item_id, region, realm, max, start_date) do
+    result = find_by_item_id(item_id, region, realm, start_date)
+    :rand.seed(:exsplus, {1, 2, 3})
+    %{
+      initial_count: length(result),
+      data: result |> Enum.take_random(max)
+    }
   end
 end

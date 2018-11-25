@@ -17,7 +17,6 @@ function chunkDays(entries, steps, startDate, diff) {
   entries.forEach(entry => {
     const timestamp = moment.utc(entry.dump_timestamp);
     const position = diff(startDate, timestamp);
-    console.log(steps - position - 1, timestamp.format("D kk") + "h");
     if (position >= 0 && position < steps) {
       init[steps - position - 1].push(entry);
     }

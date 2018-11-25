@@ -20,8 +20,9 @@ defmodule WowWeb.Router do
     get "/items", ItemController, :show
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", WowWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", WowWeb do
+    pipe_through :api
+
+    get "/items", ItemController, :show_json
+  end
 end

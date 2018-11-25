@@ -6,7 +6,7 @@ export function preselectForm() {
   document.getElementById("item_name").value = getUrlParam("item_name");
 }
 
-function getUrlParam(key) {
+export function getUrlParam(key) {
   const url = window.location.search.substr(1);
 
   return qs.parse(url)[key];

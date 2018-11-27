@@ -1,10 +1,10 @@
 import Plotly from "plotly.js-dist";
 import moment from "moment";
+import qs from "qs"
+
 import {chunk} from "./sanitize";
 import {boxplot7D, layout} from "./boxplot";
 import {getUrlParam} from "./topBar";
-
-const iconURL = "/images/blizzard/icons/36/";
 
 export async function displayGraph() {
   const result = await fetchData();
@@ -12,21 +12,21 @@ export async function displayGraph() {
   let data;
   switch(getDuration()) {
   case "1d":
-    data = boxplot7D(chunk(result.entries, 1, moment.utc()), "MMM D, kk:00");
+    data = boxplot7D(chunk(result.entries, 1, moment.utc().startOf("day")), "MMM D, kk:00");
     break;
   case "7d":
-    data = boxplot7D(chunk(result.entries, 7, moment.utc()), "MMM D Y");
+    data = boxplot7D(chunk(result.entries, 7, moment.utc().startOf("day")), "MMM D");
     break;
   case "30d":
-    data = boxplot7D(chunk(result.entries, 30, moment.utc()), "MMM D Y");
+    data = boxplot7D(chunk(result.entries, 30, moment.utc().startOf("day")), "MMM D");
     break;
   }
 
-  Plotly.newPlot('boxplotChart', data, layout);
+  Plotly.newPlot('boxplot-chart', data, layout);
 }
 
 function getDuration() {
-  const menu = document.getElementById("graph_duration");
+  const menu = document.getElementById("graph-duration");
   return menu.options[menu.selectedIndex].value;
 }
 
@@ -34,22 +34,27 @@ async function fetchData() {
   const region = getUrlParam("region");
   const realm = getUrlParam("realm");
   const itemName = getUrlParam("item_name");
-  return fetch(`/api/items?region=${region}&realm=${realm}&item_name=${itemName}&duration=${getDuration()}`).then(r => r.json());
+  const params = qs.stringify({region: region, realm: realm, item_name: itemName, duration: getDuration()});
+  return fetch(`/api/items?${params}`).then(r => r.json());
 }
 
 function showItemInfo(result) {
-  const info = document.getElementById("item_info");
-  const icon = document.getElementById("item_icon");
-  const name = document.getElementById("item_name_display");
+  const info = document.getElementById("item-info");
+  const icon = document.getElementById("item-icon");
+  const name = document.getElementById("item-name-display");
 
   info.style.display = "";
-  icon.src = `${iconURL}${result.item.icon}.jpg`;
+  icon.src = getIconURL(result.item.icon);
   name.innerText = result.item.name;
 
-  const count = document.getElementById("item_count");
+  const count = document.getElementById("item-count");
   if (result.entries.data.length == result.entries.initial_count) {
     count.innerText = `${result.entries.data.length} auction entries were analyzed.`;
   } else {
     count.innerText = `${result.entries.data.length} auction entries were analyzed. They were randomly sampled from ${result.entries.initial_count} entries.`;
   }
+}
+
+export function getIconURL(icon) {
+  return `/images/blizzard/icons/36/${icon}.jpg`
 }

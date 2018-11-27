@@ -1,17 +1,17 @@
 <div>
-  <label for="graph_duration">Duration</label>
-  <select id="graph_duration" name="graph_duration">
+  <label for="graph-duration">Duration</label>
+  <select id="graph-duration" name="graph-duration">
     <option value="1d">1 day</option>
     <option value="7d" selected="selected">7 days</option>
     <option value="30d">30 days</option>
   </select>
 </div>
 
-<h1 id="item_info" style="display:none">
-  <img id="item_icon" src=""/>
-  <span id="item_name_display"></span>
+<h1 id="item-info" style="display:none">
+  <img id="item-icon" src=""/>
+  <span id="item-name-display"></span>
 </h1>
-<p id="item_count">
+<p id="item-count">
 </p>
 
-<div id="boxplotChart"></div>
+<div id="boxplot-chart"></div>

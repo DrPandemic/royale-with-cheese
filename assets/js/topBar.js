@@ -1,9 +1,10 @@
-import qs from "qs"
+import qs from "qs";
+import {getIconURL} from "./graph";
 
 export function preselectForm() {
   selectDropdown(document.getElementById("region"), getUrlParam("region"));
   selectDropdown(document.getElementById("realm"), getUrlParam("realm"));
-  document.getElementById("item_name").value = getUrlParam("item_name");
+  document.getElementById("item-name").value = getUrlParam("item_name");
 }
 
 export function getUrlParam(key) {
@@ -18,4 +19,35 @@ function selectDropdown(menu, value) {
       menu.options[i].selected = true;
     }
   }
+}
+
+let debounce;
+const recommendationURL = "/api/items/find?";
+export function fillSearchRecommendation() {
+  if (debounce) {
+    clearTimeout(debounce);
+  }
+  debounce = setTimeout(async () => {
+    const name = document.getElementById("item-name").value;
+    const items = await fetch(`${recommendationURL}${qs.stringify({item_name: name})}`).then(r => r.json())
+
+    const container = document.getElementById("recommendation-box");
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    for (const item of items) {
+      const template = document.getElementById("recommendation-template").cloneNode(true);
+      template.id = "";
+      template.style.display = "";
+
+      const icon = template.getElementsByClassName("recommendation-icon")[0];
+      icon.src = getIconURL(item.icon);
+
+      const nameTemplate = template.getElementsByClassName("recommendation-name")[0];
+      nameTemplate.innerText = item.name;
+
+      container.appendChild(template);
+    }
+  }, 500);
 }

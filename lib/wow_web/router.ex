@@ -24,5 +24,6 @@ defmodule WowWeb.Router do
     pipe_through :api
 
     get "/items", ItemController, :show_json
+    get "/items/find", ItemController, :find
   end
 end

@@ -17,4 +17,8 @@ defmodule WowWeb.ItemController do
 
     render(conn, "show.json", entries: entries, item: item)
   end
+
+  def find(conn, %{"item_name" => item_name}) do
+    render(conn, "find.json", items: Wow.Item.find_similar_to_name(item_name))
+  end
 end

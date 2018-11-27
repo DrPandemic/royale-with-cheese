@@ -27,7 +27,15 @@
               </select>
             </div>
             <div>
-              <input type="text" name="item_name" id="item_name" placeholder="Object's name" required>
+              <div id="recommendation-template" style="display: none">
+                <div class="recommendation-item">
+                  <img class="recommendation-icon" src=""/>
+                  <span class="recommendation-name"></span>
+                </div>
+              </div>
+              <input type="text" class="search-box" name="item_name" id="item-name" placeholder="Object's name" required>
+              <div id="recommendation-box" class="recommendation-box">
+              </div>
             </div>
             <div>
               <input type="submit" value="Search">

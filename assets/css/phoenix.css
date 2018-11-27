@@ -132,7 +132,7 @@ header .header-form {
   display: flex;
   justify-content: center;
   height: 100%;
-  align-items: flex-end;
+  margin-top: 10px;
 }
 header .fa-github {
   margin: 13px;
@@ -140,11 +140,25 @@ header .fa-github {
 header div.search {
   height: 65px;
 }
-header div.search div {
+header .header-form>div {
   margin: 0 5px 0 5px
 }
 header .right a {
   float: right;
+}
+header input,
+header select {
+  margin-bottom: 0;
+}
+header .recommendation-box {
+  width: 100%;
+  background: #fdfdfd;
+  box-shadow: 5px 10px 8px #888888;
+  border-radius: 5px;
+}
+header .recommendation-item {
+  width: 100%;
+  cursor: pointer;
 }
 
 @media (min-width: 40.0rem) { /* Small devices (landscape phones, 576px and up) */

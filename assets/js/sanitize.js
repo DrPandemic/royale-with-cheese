@@ -2,13 +2,13 @@ import moment from 'moment';
 
 export function chunk(data, days, startDate) {
   if (days > 1) {
-    return chunkDays(data.data, days, startDate, (a, b) => Math.round(a.diff(b, 'hours') / 24));
+    return chunkPartition(data.data, days, startDate, (a, b) => Math.round(a.diff(b.startOf("day"), 'hours') / 24));
   } else {
-    return chunkDays(data.data, 24, startDate, (a, b) => Math.round(a.diff(b, 'minutes') / 60));
+    return chunkPartition(data.data, 24, startDate, (a, b) => Math.round(a.diff(b.startOf("day"), 'minutes') / 60));
   }
 }
 
-function chunkDays(entries, steps, startDate, diff) {
+function chunkPartition(entries, steps, startDate, diff) {
   const init = [];
   for (let i = 0; i < steps; ++i) {
     init.push([]);
@@ -16,6 +16,7 @@ function chunkDays(entries, steps, startDate, diff) {
 
   entries.forEach(entry => {
     const timestamp = moment.utc(entry.dump_timestamp);
+    console.log(timestamp.format("MMM D, kk:00"), startDate.format("MMM D, kk:00"));
     const position = diff(startDate, timestamp);
     if (position >= 0 && position < steps) {
       init[steps - position - 1].push(entry);

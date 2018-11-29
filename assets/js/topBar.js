@@ -33,21 +33,51 @@ export function fillSearchRecommendation() {
 
     const container = document.getElementById("recommendation-box");
     while (container.firstChild) {
+      container.firstChild.removeEventListener("click", recommendationClick);
       container.removeChild(container.firstChild);
     }
 
-    for (const item of items) {
-      const template = document.getElementById("recommendation-template").cloneNode(true);
-      template.id = "";
-      template.style.display = "";
+    if (items.length > 0) {
+      hideOnClickOutside(container);
+      container.style.display = "";
+    } else {
+      container.style.display = "none";
+    }
 
-      const icon = template.getElementsByClassName("recommendation-icon")[0];
+    for (const item of items) {
+      const newNode = document.getElementById("recommendation-template").cloneNode(true);
+      newNode.addEventListener("click", recommendationClick);
+      newNode.id = "";
+      newNode.style.display = "";
+
+      const icon = newNode.getElementsByClassName("recommendation-icon")[0];
       icon.src = getIconURL(item.icon);
 
-      const nameTemplate = template.getElementsByClassName("recommendation-name")[0];
+      const nameTemplate = newNode.getElementsByClassName("recommendation-name")[0];
       nameTemplate.innerText = item.name;
 
-      container.appendChild(template);
+      container.appendChild(newNode);
     }
   }, 500);
+}
+
+// https://stackoverflow.com/a/3028037/1779927
+function hideOnClickOutside(element) {
+  const isVisible = (elem) => !!elem && !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+  const outsideClickListener = (event) => {
+    if (!element.contains(event.target) && event.target.id !== "item-name") {
+      if (isVisible(element)) {
+        element.style.display = "none";
+        document.removeEventListener("click", outsideClickListener);
+        clearTimeout(debounce);
+      }
+    }
+  }
+
+  document.addEventListener("click", outsideClickListener);
+}
+
+
+function recommendationClick(e) {
+  console.log(e);
 }

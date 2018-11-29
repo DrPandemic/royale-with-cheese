@@ -16,7 +16,6 @@ function chunkPartition(entries, steps, startDate, diff) {
 
   entries.forEach(entry => {
     const timestamp = moment.utc(entry.dump_timestamp);
-    console.log(timestamp.format("MMM D, kk:00"), startDate.format("MMM D, kk:00"));
     const position = diff(startDate, timestamp);
     if (position >= 0 && position < steps) {
       init[steps - position - 1].push(entry);

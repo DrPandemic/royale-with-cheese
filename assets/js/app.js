@@ -10,3 +10,4 @@ displayGraph();
 
 document.getElementById("graph-duration").addEventListener('change', async () => { await displayGraph(); });
 document.getElementById("item-name").addEventListener('input', fillSearchRecommendation);
+document.getElementById("item-name").addEventListener('click', fillSearchRecommendation);

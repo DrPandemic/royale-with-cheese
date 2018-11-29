@@ -150,15 +150,35 @@ header input,
 header select {
   margin-bottom: 0;
 }
-header .recommendation-box {
+.recommendation-box {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  background: #fdfdfd;
+  max-width: 220px;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f0f0f0;
   box-shadow: 5px 10px 8px #888888;
   border-radius: 5px;
+  border: 1px solid rgba(50, 50, 50, 0.7);
 }
 header .recommendation-item {
   width: 100%;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+header .recommendation-item p {
+  white-space: nowrap;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+header .recommendation-row {
+  margin-top: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  padding-bottom: 5px;
+  margin-left: 5px;
 }
 
 @media (min-width: 40.0rem) { /* Small devices (landscape phones, 576px and up) */

@@ -13,7 +13,7 @@
       <nav role="navigation">
         <div></div>
         <div class="search">
-          <form class="header-form" action="/items" method="get">
+          <form class="header-form" action="/items" method="get" autocomplete="off">
             <div>
               <select id="region" name="region">
                 <option value="eu">EU</option>
@@ -27,25 +27,20 @@
               </select>
             </div>
             <div>
-              <div id="recommendation-template" style="display: none">
+              <div id="recommendation-template" style="display: none" class="recommendation-row">
                 <div class="recommendation-item">
                   <img class="recommendation-icon" src=""/>
-                  <span class="recommendation-name"></span>
+                  <p class="recommendation-name"></p>
                 </div>
               </div>
               <input type="text" class="search-box" name="item_name" id="item-name" placeholder="Object's name" required>
-              <div id="recommendation-box" class="recommendation-box">
+              <div id="recommendation-box" class="recommendation-box" style="display: none;">
               </div>
             </div>
             <div>
               <input type="submit" value="Search">
             </div>
           </form>
-        </div>
-        <div class="right">
-          <a href="https://github.com/DrPandemic/royale-with-cheese">
-            <i class="fab fa-github fa-2x"></i>
-          </a>
         </div>
       </nav>
     </header>

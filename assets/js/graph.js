@@ -52,10 +52,6 @@ function showItemInfo(result) {
   const icon = document.getElementById("item-icon");
   const name = document.getElementById("item-name-display");
 
-  if (!info || !icon || !name || !result || !result.item || !result.entries) {
-    return;
-  }
-
   info.style.display = "";
   icon.src = getIconURL(result.item.icon);
   name.innerText = result.item.name;

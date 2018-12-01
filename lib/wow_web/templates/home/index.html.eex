@@ -3,3 +3,5 @@
     <h1>Something clever to say here</h1>
   </div>
 </div>
+
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/appHome.js") %>"></script>

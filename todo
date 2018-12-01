@@ -1,6 +1,6 @@
-- Different js file for different pages
-- Homepage
+- gzip all resources
 - HTTPS
+- Homepage
 - Toggle outlier supression
 - Use arrow in recommendation
 - New graph types

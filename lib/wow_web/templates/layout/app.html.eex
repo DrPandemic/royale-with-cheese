@@ -42,6 +42,11 @@
             </div>
           </form>
         </div>
+        <div class="right">
+          <a href="https://github.com/DrPandemic/royale-with-cheese" rel="noopener" target="_blank">
+            <i class="fab fa-github fa-2x"></i>
+          </a>
+        </div>
       </nav>
     </header>
     <main role="main" class="container">
@@ -49,6 +54,5 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

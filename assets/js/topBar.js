@@ -14,11 +14,28 @@ export function getUrlParam(key) {
 }
 
 function selectDropdown(menu, value) {
-  for (const i in menu.options) {
-    if (menu.options[i].value === value) {
-      menu.options[i].selected = true;
+  for (const option of menu.options) {
+    if (option.value === value) {
+      option.selected = true;
     }
   }
+}
+
+function getDropdownValue(menu) {
+  for (const option of menu.options) {
+    if (option.selected) {
+      return option.value;
+    }
+  }
+  return "";
+}
+
+function getMenuRealm() {
+  return getDropdownValue(document.getElementById("realm"));
+}
+
+function getMenuRegion() {
+  return getDropdownValue(document.getElementById("region"));
 }
 
 let debounce;
@@ -55,6 +72,7 @@ export function fillSearchRecommendation() {
 
       const nameTemplate = newNode.getElementsByClassName("recommendation-name")[0];
       nameTemplate.innerText = item.name;
+      newNode.dataset.itemName = item.name;
 
       container.appendChild(newNode);
     }
@@ -79,5 +97,11 @@ function hideOnClickOutside(element) {
 
 
 function recommendationClick(e) {
-  console.log(e);
+  const itemName = e.target.closest(".recommendation-row").dataset.itemName;
+  const params = {
+    item_name: itemName,
+    region: getMenuRegion(),
+    realm: getMenuRealm(),
+  };
+  window.location.href = `/items?${qs.stringify(params)}`;
 }

@@ -24,7 +24,7 @@ defmodule Wow.MixProject do
   def application do
     [
       mod: {Wow.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
     ]
   end
 
@@ -54,9 +54,9 @@ defmodule Wow.MixProject do
       {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
       {:exvcr, "~> 0.10", only: :test},
       {:quantum, "~> 2.3"},
-      {:timex, "~> 3.0"},
+      {:timex, "~> 3.1"},
       {:credo, "~> 0.5", only: [:dev, :test]},
-      {:dogma, "~> 0.1", only: [:dev]}
+      {:dogma, "~> 0.1", only: [:dev]},
     ]
   end
 

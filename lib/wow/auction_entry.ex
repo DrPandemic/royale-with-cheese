@@ -83,7 +83,7 @@ defmodule Wow.AuctionEntry do
     } |> changeset
   end
 
-  @spec find_by_item_id(integer, String.t, String.t, NaiveDateTime.t) :: [Wow.AuctionEntry.Subset]
+  @spec find_by_item_id(integer, String.t, String.t, DateTime.t) :: [Wow.AuctionEntry.Subset]
   defp find_by_item_id(item_id, region, realm, start_date) do
     query = from entry in Wow.AuctionEntry,
       where: entry.item == ^item_id
@@ -98,7 +98,7 @@ defmodule Wow.AuctionEntry do
     |> Wow.AuctionEntry.Subset.tuple_to_subset
   end
 
-  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer, NaiveDateTime.t) :: [t]
+  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer, DateTime.t) :: [t]
   def find_by_item_id_with_sampling(item_id, region, realm, max, start_date) do
     result = find_by_item_id(item_id, region, realm, start_date)
     :rand.seed(:exsplus, {1, 2, 3})

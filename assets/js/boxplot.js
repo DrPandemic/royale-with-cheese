@@ -17,7 +17,7 @@ export function boxplot7D(entries, format) {
 
   return data.map(val => {
     const dataNoOutiliers = removeOutliers(val);
-    // Prevent the outlier detection from removing everything. This is an issue the que pet cage
+    // Prevent the outlier detection from removing everything. This is an issue with the pet cage
     if (dataNoOutiliers.length > val.length * outlierTreshold) {
       return dataNoOutiliers;
     }

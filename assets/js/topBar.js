@@ -4,7 +4,7 @@ import {getIconURL} from "./graph";
 export function preselectForm() {
   selectDropdown(document.getElementById("region"), getUrlParam("region"));
   selectDropdown(document.getElementById("realm"), getUrlParam("realm"));
-  document.getElementById("item-name").value = getUrlParam("item_name");
+  document.getElementById("item-name").value = getUrlParam("item_name") || "";
 }
 
 export function getUrlParam(key) {

@@ -25,9 +25,18 @@ export async function displayGraph() {
   Plotly.newPlot('boxplot-chart', data, layout);
 }
 
+function redirectToIndex() {
+  if (window.location.pathname !== "/") {
+    window.location.href = "/";
+  }
+}
+
 function getDuration() {
   const menu = document.getElementById("graph-duration");
-  return menu.options[menu.selectedIndex].value;
+  if (menu) {
+    return menu.options[menu.selectedIndex].value;
+  }
+  return "0";
 }
 
 async function fetchData() {
@@ -35,13 +44,17 @@ async function fetchData() {
   const realm = getUrlParam("realm");
   const itemName = getUrlParam("item_name");
   const params = qs.stringify({region: region, realm: realm, item_name: itemName, duration: getDuration()});
-  return fetch(`/api/items?${params}`).then(r => r.json());
+  return fetch(`/api/items?${params}`).then(r => r.json()).catch(redirectToIndex);
 }
 
 function showItemInfo(result) {
   const info = document.getElementById("item-info");
   const icon = document.getElementById("item-icon");
   const name = document.getElementById("item-name-display");
+
+  if (!info || !icon || !name || !result || !result.item || !result.entries) {
+    return;
+  }
 
   info.style.display = "";
   icon.src = getIconURL(result.item.icon);

@@ -16,14 +16,10 @@
           <form class="header-form" action="/items" method="get" autocomplete="off">
             <div>
               <select id="region" name="region">
-                <option value="eu">EU</option>
-                <option value="us">US</option>
               </select>
             </div>
             <div>
               <select id="realm" name="realm">
-                <option value="Kazzak">Kazzak</option>
-                <option value="Medivh">Medivh</option>
               </select>
             </div>
             <div>

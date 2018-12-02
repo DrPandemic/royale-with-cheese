@@ -1,7 +1,14 @@
 import qs from "qs";
 import {getIconURL} from "./graph";
 
+const regions = {
+  eu: ["Kazzak", "Medivh"],
+  us: ["Medivh"],
+};
+
 export function preselectForm() {
+  fillRegion();
+  fillRealm();
   selectDropdown(document.getElementById("region"), getUrlParam("region"));
   selectDropdown(document.getElementById("realm"), getUrlParam("realm"));
   document.getElementById("item-name").value = getUrlParam("item_name") || "";
@@ -28,6 +35,29 @@ function getDropdownValue(menu) {
     }
   }
   return "";
+}
+
+function fillRegion() {
+  const menu = document.getElementById("region");
+  for (const region of Object.keys(regions)) {
+    const option = document.createElement("option");
+    option.value = region;
+    option.innerHTML = region.toUpperCase();
+    menu.appendChild(option);
+  }
+}
+
+export function fillRealm() {
+  const menu = document.getElementById("realm");
+  while (menu.firstChild) {
+    menu.removeChild(menu.firstChild);
+  }
+  for (const realm of regions[getMenuRegion()]) {
+    const option = document.createElement("option");
+    option.value = realm;
+    option.innerHTML = realm;
+    menu.appendChild(option);
+  }
 }
 
 function getMenuRealm() {
@@ -94,7 +124,6 @@ function hideOnClickOutside(element) {
 
   document.addEventListener("click", outsideClickListener);
 }
-
 
 function recommendationClick(e) {
   const itemName = e.target.closest(".recommendation-row").dataset.itemName;

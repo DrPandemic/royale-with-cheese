@@ -1,9 +1,18 @@
 version: '3'
 
 services:
+  edge:
+    build:
+      context: ./
+      dockerfile: Dockerfile-edge
+    ports:
+      - 80:80
+      - 443:443
+
   web:
     build:
       context: ./
+      dockerfile: Dockerfile-dev
     tty: true
     ports:
       - 4000:4000
@@ -14,6 +23,7 @@ services:
         - .env
     environment:
       - MIX_ENV=dev
+      - POSTGRES_PASSWORD=password
 
   database:
     image: postgres:latest

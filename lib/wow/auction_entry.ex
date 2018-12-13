@@ -87,9 +87,9 @@ defmodule Wow.AuctionEntry do
   defp find_by_item_id(item_id, region, realm, start_date) do
     query = from entry in Wow.AuctionEntry,
       where: entry.item == ^item_id
-    and entry.owner_realm == ^realm
-    and entry.region == ^region
-    and entry.dump_timestamp > ^start_date,
+        and entry.owner_realm == ^realm
+        and entry.region == ^region
+        and entry.dump_timestamp > ^start_date,
       select: {min(entry.dump_timestamp), entry.buyout, entry.quantity},
       group_by: [:buyout, :quantity]
 

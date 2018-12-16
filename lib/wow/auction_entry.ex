@@ -1,5 +1,13 @@
 defmodule Wow.AuctionEntry do
+  alias Wow.Repo
+  use Ecto.Schema
+  import Ecto.Query, only: [from: 2]
+  import Ecto.Changeset
+
   defmodule Subset do
+    @moduledoc """
+    Used to carry the smallest usable subset of an entry.
+    """
     @derive {Jason.Encoder, only: [:dump_timestamp, :quantity, :buyout]}
     defstruct dump_timestamp: nil, quantity: 0, buyout: 0
 
@@ -15,11 +23,6 @@ defmodule Wow.AuctionEntry do
       Enum.map(result, fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2)} end)
     end
   end
-
-  alias Wow.Repo
-  use Ecto.Schema
-  import Ecto.Query, only: [from: 2]
-  import Ecto.Changeset
 
   @type raw_entry :: %{optional(String.t) => String.t}
   @type t :: Ecto.Schema.t

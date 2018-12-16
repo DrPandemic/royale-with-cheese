@@ -1,14 +1,6 @@
 version: '3'
 
 services:
-  edge:
-    build:
-      context: ./
-      dockerfile: Dockerfile-edge
-    ports:
-      - 80:80
-      - 443:443
-
   web:
     build:
       context: ./
@@ -31,6 +23,19 @@ services:
       - POSTGRES_PASSWORD=password
     ports:
       - 5432:5432
+    deploy:
+      resources:
+        limits:
+          memory: 12GB
+
+  mongo:
+    image: postgres:latest
+    ports:
+      - 27017:27017
+    deploy:
+      resources:
+        limits:
+          memory: 12GB
 
   redis:
     image: redis

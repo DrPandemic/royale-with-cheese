@@ -49,6 +49,8 @@ defmodule Wow.Crawler do
         ) do
       {:ok, %Tesla.Env{status: 200, body: body}} ->
         body
+      {:ok, %Tesla.Env{status: 404}} ->
+        :not_found
     end
   end
 

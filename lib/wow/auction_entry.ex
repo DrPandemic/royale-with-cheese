@@ -60,9 +60,9 @@ defmodule Wow.AuctionEntry do
   def changeset(%Wow.AuctionEntry{} = entry, params \\ %{}) do
     entry
     |> cast(params, [:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
-                    :time_left, :rand, :seed, :context, :dump_timestamp])
-                    |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
-                                         :time_left, :rand, :seed, :context, :dump_timestamp])
+      :time_left, :rand, :seed, :context, :dump_timestamp])
+    |> validate_required([:auc_id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
+      :time_left, :rand, :seed, :context, :dump_timestamp])
     |> validate_inclusion(:time_left, ["SHORT", "MEDIUM", "LONG", "VERY LONG"])
     |> unique_constraint(:auc_id_dump_timestamp_owner_realm_region)
   end
@@ -83,7 +83,7 @@ defmodule Wow.AuctionEntry do
       seed: auction["seed"],
       context: auction["context"],
       dump_timestamp: timestamp |> DateTime.from_unix!(:millisecond) |> DateTime.truncate(:second)
-    } |> changeset
+    }
   end
 
   @spec find_by_item_id(integer, String.t, String.t, DateTime.t) :: [Wow.AuctionEntry.Subset]

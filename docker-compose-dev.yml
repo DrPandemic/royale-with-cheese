@@ -26,7 +26,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 12GB
+          memory: 2GB
 
   mongo:
     image: postgres:latest

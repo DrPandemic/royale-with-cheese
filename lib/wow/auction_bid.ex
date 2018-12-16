@@ -13,7 +13,7 @@ defmodule Wow.AuctionBid do
   @type t :: Ecto.Schema.t
 
   @derive {Jason.Encoder, only: [:id, :bid, :item, :owner, :owner_realm, :region, :buyout,
-    :quantity, :rand, :seed, :context]}
+    :quantity, :rand, :context]}
   schema "auction_bid" do
     field :bid, :integer
     field :item, :integer
@@ -23,7 +23,6 @@ defmodule Wow.AuctionBid do
     field :buyout, :integer
     field :quantity, :integer
     field :rand, :integer
-    field :seed, :integer
     field :context, :integer
     has_one :timestamp, Wow.AuctionTimestamp
   end
@@ -32,9 +31,9 @@ defmodule Wow.AuctionBid do
   def changeset(%Wow.AuctionBid{} = bid, params \\ %{}) do
     bid
     |> cast(params, [:id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
-      :rand, :seed, :context])
+      :rand, :context])
     |> validate_required([:id, :bid, :item, :owner, :owner_realm, :region, :buyout, :quantity,
-      :rand, :seed, :context])
+      :rand, :context])
     |> unique_constraint(:id, name: :auction_bid_pkey)
   end
 
@@ -59,7 +58,6 @@ defmodule Wow.AuctionBid do
         buyout: e.buyout,
         quantity: e.quantity,
         rand: e.rand,
-        seed: e.seed,
         context: e.context,
       }
     end)

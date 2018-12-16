@@ -110,4 +110,16 @@ defmodule Wow.AuctionEntry do
       data: result |> Enum.take_random(max)
     }
   end
+
+  @spec find_firsts(integer) :: [%Wow.AuctionEntry{}]
+  def find_firsts(limit) do
+    from(e in Wow.AuctionEntry, limit: ^limit)
+    |> Repo.all
+  end
+
+  @spec delete_by_ids([integer]) :: :ok
+  def delete_by_ids(ids) do
+    from(e in Wow.AuctionEntry, where: e.id in ^ids)
+    |> Repo.delete_all
+  end
 end

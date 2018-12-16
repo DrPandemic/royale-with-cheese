@@ -2,8 +2,8 @@ import qs from "qs";
 import {getIconURL} from "./graph";
 
 const regions = {
-  eu: ["Kazzak", "Medivh"],
-  us: ["Medivh"],
+  eu: ["Kazzak", "Medivh", "Suramar"],
+  us: ["Medivh", "Exodar"],
 };
 
 export function preselectForm() {
@@ -39,6 +39,9 @@ function getDropdownValue(menu) {
 
 function fillRegion() {
   const menu = document.getElementById("region");
+  while (menu.firstChild) {
+    menu.removeChild(menu.firstChild);
+  }
   for (const region of Object.keys(regions)) {
     const option = document.createElement("option");
     option.value = region;

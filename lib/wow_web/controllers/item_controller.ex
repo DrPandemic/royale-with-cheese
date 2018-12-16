@@ -13,7 +13,7 @@ defmodule WowWeb.ItemController do
       "30d" -> Timex.now |> Timex.shift(days: -29)
     end
     item = List.first(Wow.Item.find_similar_to_name(item_name))
-    entries = Wow.AuctionEntry.find_by_item_id_with_sampling(item.id, region, realm, 1000, start_date)
+    entries = Wow.AuctionBid.find_by_item_id_with_sampling(item.id, region, realm, 1000, start_date)
 
     render(conn, "show.json", entries: entries, item: item)
   end

@@ -117,9 +117,9 @@ defmodule Wow.AuctionEntry do
     |> Repo.all
   end
 
-  @spec delete_by_ids([integer]) :: :ok
-  def delete_by_ids(ids) do
-    from(e in Wow.AuctionEntry, where: e.id in ^ids)
+  @spec delete_by_id(integer) :: :ok
+  def delete_by_id(id) do
+    from(e in Wow.AuctionEntry, where: e.id == ^id)
     |> Repo.delete_all
   end
 end

@@ -30,12 +30,16 @@ defmodule Wow.Jobs.Crawler do
 
   @spec insert(entries: [Wow.AuctionEntry]) :: any()
   defp insert(entries) do
-    bids = Wow.AuctionBid.from_entries(entries)
-    timestamps = Wow.AuctionTimestamp.from_entries(entries)
     Wow.Repo.checkout(fn ->
       IO.puts("Tick")
-      bids |> Enum.each(&Wow.AuctionBid.insert/1)
-      timestamps |> Enum.each(&Wow.AuctionTimestamp.insert/1)
+      Enum.each(entries, fn e ->
+        realm = Wow.Realm.insert(Wow.Realm.from_entry(e))
+        character = Wow.Character.insert(%Wow.Character{Wow.Character.from_entry(e) | realm_id: realm.id})
+        Wow.AuctionBid.insert(
+          %Wow.AuctionBid{Wow.AuctionBid.from_entry(e) | realm_id: realm.id, character_id: character.id}
+        )
+        Wow.AuctionTimestamp.insert(Wow.AuctionTimestamp.from_entry(e))
+      end)
     end)
   end
 end

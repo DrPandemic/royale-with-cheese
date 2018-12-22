@@ -38,7 +38,6 @@ defmodule Wow.Jobs.Crawler do
         Wow.AuctionBid.insert(
           %Wow.AuctionBid{Wow.AuctionBid.from_entry(e) | realm_id: realm.id, character_id: character.id}
         )
-        Wow.AuctionTimestamp.insert(Wow.AuctionTimestamp.from_entry(e))
       end)
     end)
   end

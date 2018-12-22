@@ -15,12 +15,15 @@ defmodule Wow.AuctionBid do
   @derive {Jason.Encoder, only: [:id, :item_id, :buyout, :quantity, :rand, :context,
     :timestamps, :realm, :character, :realm_id, :character_id]}
   schema "auction_bid" do
+    field :bid, :integer
     field :item_id, :integer
     field :buyout, :integer
     field :quantity, :integer
     field :rand, :integer
     field :context, :integer
-    has_many :timestamps, Wow.AuctionTimestamp
+    field :first_dump_timestamp, :utc_datetime
+    field :last_dump_timestamp, :utc_datetime
+    field :last_time_left, :string
     belongs_to :realm, Wow.Realm
     belongs_to :character, Wow.Character
   end
@@ -28,8 +31,8 @@ defmodule Wow.AuctionBid do
   @spec changeset(Wow.AuctionBid.t, map) :: Ecto.Changeset.t
   def changeset(%Wow.AuctionBid{} = bid, params \\ %{}) do
     bid
-    |> cast(params, [:id, :item_id, :buyout, :quantity, :rand, :context, :realm_id, :character_id])
-    |> validate_required([:item_id, :buyout, :quantity, :rand, :context, :realm_id, :character_id])
+    |> cast(params, [:id, :item_id, :buyout, :quantity, :rand, :context, :realm_id, :character_id, :first_dump_timestamp, :last_dump_timestamp, :last_time_left])
+    |> validate_required([:item_id, :buyout, :quantity, :rand, :context, :realm_id, :character_id, :first_dump_timestamp, :last_dump_timestamp, :last_time_left])
     |> unique_constraint(:id, name: :auction_bid_pkey)
   end
 
@@ -37,7 +40,7 @@ defmodule Wow.AuctionBid do
   def insert(%Wow.AuctionBid{} = bid, attrs \\ %{}) do
     {:ok, result} = bid
     |> changeset(attrs)
-    |> Repo.insert(returning: true, on_conflict: :replace_all_except_primary_key, conflict_target: [:id])
+    |> Repo.insert(returning: true, on_conflict: {:replace, [:last_dump_timestamp, :last_time_left, :bid]}, conflict_target: :id)
 
     result
   end
@@ -52,25 +55,27 @@ defmodule Wow.AuctionBid do
   def from_entry(e) do
     %Wow.AuctionBid{
       id: e.auc_id,
+      bid: e.bid,
       item_id: e.item,
       buyout: e.buyout,
       quantity: e.quantity,
       rand: e.rand,
       context: e.context,
+      first_dump_timestamp: e.dump_timestamp,
+      last_dump_timestamp: e.dump_timestamp,
+      last_time_left: e.time_left,
     }
   end
 
   @spec find_by_item_id(integer, String.t, String.t, DateTime.t) :: [Wow.AuctionEntry.Subset]
   defp find_by_item_id(item_id, region, realm, start_date) do
     query = from entry in Wow.AuctionBid,
-      inner_join: t in assoc(entry, :timestamps),
       inner_join: r in assoc(entry, :realm),
       where: entry.item_id == ^item_id
         and r.name == ^realm
         and r.region == ^region
-        and t.dump_timestamp > ^start_date,
-      select: {min(t.dump_timestamp), entry.buyout, entry.quantity},
-      group_by: [:buyout, :quantity]
+        and entry.first_dump_timestamp > ^start_date,
+      select: {entry.first_dump_timestamp, entry.buyout, entry.quantity}
 
     query
     |> Repo.all

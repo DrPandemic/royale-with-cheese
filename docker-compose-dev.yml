@@ -27,6 +27,7 @@ services:
       resources:
         limits:
           memory: 2GB
+          cpus: "2"
 
   mongo:
     image: postgres:latest

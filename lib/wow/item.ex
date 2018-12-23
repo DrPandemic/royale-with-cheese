@@ -1,6 +1,11 @@
 defmodule Wow.Item do
+  @moduledoc """
+  Represent an item. They can by searched by id or by name.
+  """
+
   alias Wow.Repo
   use Ecto.Schema
+  use Memoize
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
@@ -70,7 +75,7 @@ defmodule Wow.Item do
   end
 
   @spec find_similar_to_name(String.t) :: [t]
-  def find_similar_to_name(item_name) do
+  defmemo find_similar_to_name(item_name), expires_in: 60 * 60 * 1000 do
     query = from i in Wow.Item,
       order_by: fragment("similarity(name, ?) DESC", ^String.downcase(item_name)),
       limit: 10

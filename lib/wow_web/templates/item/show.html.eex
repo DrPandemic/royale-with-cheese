@@ -16,4 +16,4 @@
 
 <div id="boxplot-chart"></div>
 
-<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/appShow.js") %>"></script>
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/appShow.js") %>" async="true"></script>

@@ -29,4 +29,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/appHome.js") %>"></script>
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/appHome.js") %>" async="true"></script>

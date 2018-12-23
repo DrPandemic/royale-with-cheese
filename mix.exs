@@ -57,6 +57,7 @@ defmodule Wow.MixProject do
       {:timex, "~> 3.1"},
       {:credo, "~> 0.5", only: [:dev, :test]},
       {:dogma, "~> 0.1", only: [:dev]},
+      {:memoize, "~> 1.2"},
     ]
   end
 

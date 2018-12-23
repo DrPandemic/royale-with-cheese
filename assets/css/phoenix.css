@@ -30,6 +30,9 @@ body {
 .home-container {
   text-align: left;
 }
+.home-container h1 {
+  margin-top: 10px;
+}
 .home-container h2 {
   margin-bottom: 0;
 }

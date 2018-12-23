@@ -10,7 +10,7 @@
   <body>
     <header class="header">
       <nav role="navigation">
-        <div></div>
+        <div class="home-link-container"><b><a href="/" class="home-link">AuctionTotem</a></b></div>
         <div class="search">
           <form class="header-form" action="/items" method="get" autocomplete="off">
             <div>
@@ -35,11 +35,11 @@
               </div>
             </div>
             <div>
-              <input type="submit" value="Search">
+              <input class="search-button" type="submit" value="Search">
             </div>
           </form>
         </div>
-        <div class="right">
+        <div class="right github-container">
           <a href="https://github.com/DrPandemic/royale-with-cheese" rel="noopener" target="_blank">
             <i class="github-icon"></i>
           </a>

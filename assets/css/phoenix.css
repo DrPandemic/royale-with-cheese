@@ -72,36 +72,6 @@ select {
 .alert:empty {
   display: none;
 }
-.help-block {
-  color: #a94442;
-  display: block;
-  margin: -1rem 0 2rem;
-}
-
-/* Phoenix promo and logo */
-.phx-hero {
-  text-align: center;
-  border-bottom: 1px solid #e3e3e3;
-  background: #eee;
-  border-radius: 6px;
-  padding: 3em;
-  margin-bottom: 3rem;
-  font-weight: 200;
-  font-size: 120%;
-}
-.phx-hero p {
-  margin: 0;
-}
-.phx-logo {
-  min-width: 300px;
-  margin: 1rem;
-  display: block;
-}
-.phx-logo img {
-  width: auto;
-  display: block;
-}
-
 /* Headers */
 header {
   width: 100%;
@@ -142,7 +112,6 @@ header .header-form {
   display: flex;
   justify-content: center;
   height: 100%;
-  margin-top: 10px;
 }
 header .fa-github {
   margin: 13px;
@@ -151,7 +120,7 @@ header div.search {
   height: 65px;
 }
 header .header-form>div {
-  margin: 0 5px 0 5px
+  margin: 12px 5px auto 5px;
 }
 header .right a {
   float: right;
@@ -159,6 +128,9 @@ header .right a {
 header input,
 header select {
   margin-bottom: 0;
+}
+.search-box {
+  min-width: 130px;
 }
 .recommendation-box {
   position: relative;
@@ -191,25 +163,51 @@ header .recommendation-row {
   margin-left: 5px;
 }
 
-@media (min-width: 40.0rem) { /* Small devices (landscape phones, 576px and up) */
-  header section {
-    flex-direction: row;
+@media (max-width: 35.0rem) { /* Small devices (landscape phones, 576px and up) */
+  .home-link-container,
+  .github-container {
+    display: none;
   }
-  header nav ul {
-    margin: 1rem;
+
+  header nav {
+    display: block;
   }
-  .phx-logo {
-    flex-basis: 527px;
-    margin: 2rem 1rem;
+
+  .search-box {
+    min-width: 70px;
+    max-width: 130px;
+  }
+
+  input.search-button {
+    min-width: 80px;
+    padding: 0;
+  }
+
+  .search select {
+    min-width: 50px;
+    width: 100%;
+  }
+
+  .recommendation-box {
+    min-width: 70px;
+    max-width: 130px;
   }
 }
 
 .github-icon {
   width: 36px;
   height: 36px;
-  margin: 10px 10px;
   background-size: cover;
   background-repeat: no-repeat;
   display: inline-block;
   background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB3aWR0aD0iMTc5MiIgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik04OTYgMTI4cTIwOSAwIDM4NS41IDEwM3QyNzkuNSAyNzkuNSAxMDMgMzg1LjVxMCAyNTEtMTQ2LjUgNDUxLjV0LTM3OC41IDI3Ny41cS0yNyA1LTQwLTd0LTEzLTMwcTAtMyAuNS03Ni41dC41LTEzNC41cTAtOTctNTItMTQyIDU3LTYgMTAyLjUtMTh0OTQtMzkgODEtNjYuNSA1My0xMDUgMjAuNS0xNTAuNXEwLTExOS03OS0yMDYgMzctOTEtOC0yMDQtMjgtOS04MSAxMXQtOTIgNDRsLTM4IDI0cS05My0yNi0xOTItMjZ0LTE5MiAyNnEtMTYtMTEtNDIuNS0yN3QtODMuNS0zOC41LTg1LTEzLjVxLTQ1IDExMy04IDIwNC03OSA4Ny03OSAyMDYgMCA4NSAyMC41IDE1MHQ1Mi41IDEwNSA4MC41IDY3IDk0IDM5IDEwMi41IDE4cS0zOSAzNi00OSAxMDMtMjEgMTAtNDUgMTV0LTU3IDUtNjUuNS0yMS41LTU1LjUtNjIuNXEtMTktMzItNDguNS01MnQtNDkuNS0yNGwtMjAtM3EtMjEgMC0yOSA0LjV0LTUgMTEuNSA5IDE0IDEzIDEybDcgNXEyMiAxMCA0My41IDM4dDMxLjUgNTFsMTAgMjNxMTMgMzggNDQgNjEuNXQ2NyAzMCA2OS41IDcgNTUuNS0zLjVsMjMtNHEwIDM4IC41IDg4LjV0LjUgNTQuNXEwIDE4LTEzIDMwdC00MCA3cS0yMzItNzctMzc4LjUtMjc3LjV0LTE0Ni41LTQ1MS41cTAtMjA5IDEwMy0zODUuNXQyNzkuNS0yNzkuNSAzODUuNS0xMDN6bS00NzcgMTEwM3EzLTctNy0xMi0xMC0zLTEzIDItMyA3IDcgMTIgOSA2IDEzLTJ6bTMxIDM0cTctNS0yLTE2LTEwLTktMTYtMy03IDUgMiAxNiAxMCAxMCAxNiAzem0zMCA0NXE5LTcgMC0xOS04LTEzLTE3LTYtOSA1IDAgMTh0MTcgN3ptNDIgNDJxOC04LTQtMTktMTItMTItMjAtMy05IDggNCAxOSAxMiAxMiAyMCAzem01NyAyNXEzLTExLTEzLTE2LTE1LTQtMTkgN3QxMyAxNXExNSA2IDE5LTZ6bTYzIDVxMC0xMy0xNy0xMS0xNiAwLTE2IDExIDAgMTMgMTcgMTEgMTYgMCAxNi0xMXptNTgtMTBxLTItMTEtMTgtOS0xNiAzLTE0IDE1dDE4IDggMTQtMTR6Ii8+PC9zdmc+')
+}
+
+.home-link-container,
+.github-container
+{
+  margin: auto 10px auto 10px;
+}
+.home-link-container .home-link {
+  color: black;
 }

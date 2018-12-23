@@ -1,6 +1,6 @@
 <div class="home-container">
   <div>
-    <h1>The most expensive items in the last day</h1>
+    <h1>Most expensive items in the last day</h1>
     <%= Enum.map(@most_expensive_items, fn item -> %>
       <div class="home-item">
         <h2>
@@ -14,7 +14,7 @@
     <% end) %>
   </div>
   <div>
-    <h1>The most present items in the last day</h1>
+    <h1>Most present items in the last day</h1>
     <%= Enum.map(@most_present_items, fn item -> %>
       <div class="home-item">
         <h2>

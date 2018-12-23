@@ -28,8 +28,15 @@ body {
   width: 100%;
 }
 .home-container {
-  text-align: center;
+  text-align: left;
 }
+.home-container h2 {
+  margin-bottom: 0;
+}
+.home-container .home-item {
+  margin: 0 0 15px 20px;
+}
+
 select {
   width: auto;
 }

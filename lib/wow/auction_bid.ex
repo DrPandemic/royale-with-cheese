@@ -16,7 +16,6 @@ defmodule Wow.AuctionBid do
     :timestamps, :realm, :character, :realm_id, :character_id]}
   schema "auction_bid" do
     field :bid, :integer
-    field :item_id, :integer
     field :buyout, :integer
     field :quantity, :integer
     field :rand, :integer
@@ -26,6 +25,7 @@ defmodule Wow.AuctionBid do
     field :last_time_left, :string
     belongs_to :realm, Wow.Realm
     belongs_to :character, Wow.Character
+    belongs_to :item, Wow.Item
   end
 
   @spec changeset(Wow.AuctionBid.t, map) :: Ecto.Changeset.t
@@ -90,5 +90,48 @@ defmodule Wow.AuctionBid do
       initial_count: length(result),
       data: result |> Enum.take_random(max)
     }
+  end
+
+  @spec most_expensive_items :: [%{id: integer, name: String.t, icon: String.t, price: float, count: integer}]
+  def most_expensive_items do
+    lower = Timex.now |> Timex.shift(days: -1)
+    upper = Timex.now
+    query = from entry in Wow.AuctionBid,
+      inner_join: item in assoc(entry, :item),
+      where: entry.first_dump_timestamp > ^lower
+        and entry.first_dump_timestamp <= ^upper,
+      having: count(entry.item_id) > 50,
+      limit: 3,
+      order_by: [desc: avg(entry.buyout / entry.quantity)],
+      group_by: [item.id, item.name, item.icon],
+      select: {item.id, item.name, item.icon, avg(entry.buyout / entry.quantity), count(item.id)}
+
+    query
+    |> Repo.all
+    |> Enum.map(fn ({id, name, icon, price, count}) ->
+      {price, _} = Integer.parse(Decimal.to_string(price))
+      %{id: id, name: name, icon: icon, price: price, count: count}
+    end)
+  end
+
+  @spec most_present_items :: [%{id: integer, name: String.t, icon: String.t, price: float}]
+  def most_present_items do
+    lower = Timex.now |> Timex.shift(days: -1)
+    upper = Timex.now
+    query = from entry in Wow.AuctionBid,
+      inner_join: item in assoc(entry, :item),
+      where: entry.first_dump_timestamp > ^lower
+    and entry.first_dump_timestamp <= ^upper,
+      limit: 3,
+      order_by: [desc: count(item.id)],
+      group_by: [item.id, item.name, item.icon],
+      select: {item.id, item.name, item.icon, avg(entry.buyout / entry.quantity), count(item.id)}
+
+    query
+    |> Repo.all
+    |> Enum.map(fn ({id, name, icon, price, count}) ->
+      {price, _} = Integer.parse(Decimal.to_string(price))
+      %{id: id, name: name, icon: icon, price: price, count: count}
+    end)
   end
 end

@@ -1,6 +1,31 @@
 <div class="home-container">
   <div>
-    <h1>Something clever to say here</h1>
+    <h1>The most expensive items in the last day</h1>
+    <%= Enum.map(@most_expensive_items, fn item -> %>
+      <div class="home-item">
+        <h2>
+          <img id="item-icon" src="/images/blizzard/icons/36/<%= item.icon %>.jpg"/>
+          <span id="item-name-display"><%= item.name %></span>
+        </h2>
+        <span>
+          It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.
+        </span>
+      </div>
+    <% end) %>
+  </div>
+  <div>
+    <h1>The most present items in the last day</h1>
+    <%= Enum.map(@most_present_items, fn item -> %>
+      <div class="home-item">
+        <h2>
+          <img id="item-icon" src="/images/blizzard/icons/36/<%= item.icon %>.jpg"/>
+          <span id="item-name-display"><%= item.name %></span>
+        </h2>
+        <span>
+          It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.
+        </span>
+      </div>
+    <% end) %>
   </div>
 </div>
 

@@ -1,6 +1,7 @@
 - gzip all resources
 - mobile css
-- Homepage
+- item tooltips
+  - clickable items
 - Toggle outlier supression
 - New graph types
 - readme

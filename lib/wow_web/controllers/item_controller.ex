@@ -8,7 +8,7 @@ defmodule WowWeb.ItemController do
   def show_json(conn, %{"region" => region, "realm" => realm, "item_name" => item_name} = params) do
     duration = Map.get(params, "duration", "7d")
     start_date = case duration do
-      "1d" ->  Timex.now |> Timex.beginning_of_day
+      "1d" ->  Timex.now |> Timex.shift(days: -1)
       "7d" ->  Timex.now |> Timex.shift(days: -6)
       "30d" -> Timex.now |> Timex.shift(days: -29)
     end

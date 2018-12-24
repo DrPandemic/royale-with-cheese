@@ -12,13 +12,13 @@ export async function displayGraph() {
   let data;
   switch(getDuration()) {
   case "1d":
-    data = boxplot7D(chunk(result.entries, 1, moment.utc().startOf("day")), "MMM D, kk:00");
+    data = boxplot7D(chunk(result.entries, 1, moment.utc()), "kk:00");
     break;
   case "7d":
-    data = boxplot7D(chunk(result.entries, 7, moment.utc().startOf("day")), "MMM D");
+    data = boxplot7D(chunk(result.entries, 7, moment.utc().startOf("day")), "ddd, MMM D");
     break;
   case "30d":
-    data = boxplot7D(chunk(result.entries, 30, moment.utc().startOf("day")), "MMM D");
+    data = boxplot7D(chunk(result.entries, 30, moment.utc().startOf("day")), "ddd, MMM D");
     break;
   }
 

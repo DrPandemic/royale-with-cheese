@@ -15,14 +15,14 @@ defmodule Wow.Jobs.Crawler do
       } = Wow.Crawler.get_url(token, region, realm)
       auctions = Wow.Crawler.get_dump(url)
 
-      IO.puts "Received #{realm}"
+      IO.puts "Received #{region} - #{realm}"
 
       auctions
       |> Enum.map(fn e -> Wow.AuctionEntry.from_raw(e, last_modified, region) end)
       |> Enum.chunk_every(500)
       |> Enum.each(&insert/1)
 
-      IO.puts "Done #{realm}"
+      IO.puts "Done #{region} - #{realm}"
 
       :ok
     end)

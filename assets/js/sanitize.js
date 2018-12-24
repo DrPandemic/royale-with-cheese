@@ -4,7 +4,7 @@ export function chunk(data, days, endDate) {
   if (days > 1) {
     return chunkPartition(data.data, days, endDate, (a, b) => Math.round(a.diff(b.startOf("day"), 'hours') / 24));
   } else {
-    return chunkPartition(data.data, 24, endDate, (a, b) => Math.round(a.diff(b.startOf("day"), 'minutes') / 60));
+    return chunkPartition(data.data, 24, endDate, (a, b) => Math.round(a.diff(b, 'minutes') / 60));
   }
 }
 

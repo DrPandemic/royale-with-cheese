@@ -79,6 +79,9 @@ export function fillSearchRecommendation() {
   }
   debounce = setTimeout(async () => {
     const name = document.getElementById("item-name").value;
+    if (name === "") {
+      return;
+    }
     const items = await fetch(`${recommendationURL}${qs.stringify({item_name: name})}`).then(r => r.json())
 
     const container = document.getElementById("recommendation-box");

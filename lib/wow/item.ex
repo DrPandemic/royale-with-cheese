@@ -62,12 +62,12 @@ defmodule Wow.Item do
 
   @spec find_missing_items() :: [integer]
   def find_missing_items do
-    query = from e in Wow.AuctionEntry,
-      distinct: e.item,
+    query = from e in Wow.AuctionBid,
+      distinct: e.item_id,
       left_join: i in Wow.Item,
-      on: i.id == e.item,
+      on: i.id == e.item_id,
       where: is_nil(i.id),
-      select: {e.item}
+      select: {e.item_id}
 
     query
     |> Repo.all

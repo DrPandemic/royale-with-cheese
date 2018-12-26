@@ -6,7 +6,6 @@ defmodule Wow.AuctionBid do
 
   alias Wow.Repo
   use Ecto.Schema
-  use Memoize
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
@@ -84,7 +83,7 @@ defmodule Wow.AuctionBid do
   end
 
   @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer, DateTime.t) :: [t]
-  defmemo find_by_item_id_with_sampling(item_id, region, realm, max, start_date), expires_in: 30 * 60 * 1000 do
+  def find_by_item_id_with_sampling(item_id, region, realm, max, start_date) do
     result = find_by_item_id(item_id, region, realm, start_date)
     :rand.seed(:exsplus, {1, 2, 3})
     %{
@@ -94,7 +93,7 @@ defmodule Wow.AuctionBid do
   end
 
   @spec most_expensive_items :: [%{id: integer, name: String.t, icon: String.t, price: float, count: integer}]
-  defmemo most_expensive_items, expires_in: 60 * 60 * 1000 do
+  def most_expensive_items do
     lower = Timex.now |> Timex.shift(days: -1)
     upper = Timex.now
     query = from entry in Wow.AuctionBid,
@@ -116,7 +115,7 @@ defmodule Wow.AuctionBid do
   end
 
   @spec most_present_items :: [%{id: integer, name: String.t, icon: String.t, price: float}]
-  defmemo most_present_items, expires_in: 60 * 60 * 1000 do
+  def most_present_items do
     lower = Timex.now |> Timex.shift(days: -1)
     upper = Timex.now
     query = from entry in Wow.AuctionBid,

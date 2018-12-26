@@ -1,12 +1,17 @@
 - Toggle : Hide single values in graph
+- Toggle outlier supression
 - Graph title
-- Use arrow key in search bar
+- Loading "bar" when changing graph type
 - item tooltips
   - clickable items
-- Toggle outlier supression
+  + item level
+  + description
+  + required level
+  + buy price
+  + sell price
 - New graph types
 - readme
 - Analyze tendencies between weekdays
 ~ Google Ads
-- Loading "bar" when changing graph type
+~ Google analytics
 - Profesion buying guide

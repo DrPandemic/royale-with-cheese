@@ -5,6 +5,7 @@ const regions = {
   eu: ["Kazzak", "Medivh", "Suramar"],
   us: ["Medivh", "Exodar"],
 };
+const recommendationContainer = document.getElementById("recommendation-box");
 
 export function preselectForm() {
   fillRegion();
@@ -84,18 +85,18 @@ export function fillSearchRecommendation() {
     }
     const items = await fetch(`${recommendationURL}${qs.stringify({item_name: name})}`).then(r => r.json())
 
-    const container = document.getElementById("recommendation-box");
-    while (container.firstChild) {
-      container.firstChild.removeEventListener("click", recommendationClick);
-      container.removeChild(container.firstChild);
+    while (recommendationContainer.firstChild) {
+      recommendationContainer.firstChild.removeEventListener("click", recommendationClick);
+      recommendationContainer.removeChild(recommendationContainer.firstChild);
     }
 
     if (items.length > 0) {
-      hideOnClickOutside(container);
-      container.style.display = "";
+      hideOnClickOutside(recommendationContainer);
+      recommendationContainer.style.display = "";
     } else {
-      container.style.display = "none";
+      recommendationContainer.style.display = "none";
     }
+    recommendationContainer.scrollTop = 0;
 
     for (const item of items) {
       const newNode = document.getElementById("recommendation-template").cloneNode(true);
@@ -110,14 +111,17 @@ export function fillSearchRecommendation() {
       nameTemplate.innerText = item.name;
       newNode.dataset.itemName = item.name;
 
-      container.appendChild(newNode);
+      recommendationContainer.appendChild(newNode);
     }
   }, 500);
 }
 
+function isVisible(elem) {
+  return !!elem && !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+}
+
 // https://stackoverflow.com/a/3028037/1779927
 function hideOnClickOutside(element) {
-  const isVisible = (elem) => !!elem && !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
   const outsideClickListener = (event) => {
     if (!element.contains(event.target) && event.target.id !== "item-name") {
       if (isVisible(element)) {
@@ -133,10 +137,51 @@ function hideOnClickOutside(element) {
 
 function recommendationClick(e) {
   const itemName = e.target.closest(".recommendation-row").dataset.itemName;
+  gotoItem(itemName);
+}
+
+function gotoItem(itemName) {
   const params = {
     item_name: itemName,
     region: getMenuRegion(),
     realm: getMenuRealm(),
   };
   window.location.href = `/items?${qs.stringify(params)}`;
+}
+
+export function registerArrows() {
+  document.onkeydown = onKeyDown;
+}
+
+function onKeyDown(e) {
+  if (!isVisible(recommendationContainer) || !['ArrowUp', 'ArrowDown', 'Enter'].includes(e.key)) {
+    return;
+  }
+  const index = Array.from(recommendationContainer.childNodes).findIndex(c => c.classList.contains('selected'));
+  let nextIndex = 0;
+
+  switch(e.key) {
+  case 'ArrowUp':
+    nextIndex = (index - 1) < 0 ? recommendationContainer.childNodes.length - 1 : index - 1;
+    break;
+  case 'ArrowDown':
+    nextIndex = (index + 1) % recommendationContainer.childNodes.length;
+    break;
+  case 'Enter':
+    if (index !== -1) {
+      e.preventDefault();
+    }
+    gotoItem(recommendationContainer.childNodes[index].dataset.itemName);
+    return;
+  }
+
+  // Change classes
+  for(const e of recommendationContainer.childNodes) {
+    e.classList.remove('selected');
+  }
+  recommendationContainer.childNodes[nextIndex].classList.add('selected');
+
+  // Scroll recommendation
+  // The result is not super natural, but good enough.
+  recommendationContainer.scrollTop = recommendationContainer.childNodes[nextIndex].offsetTop;
 }

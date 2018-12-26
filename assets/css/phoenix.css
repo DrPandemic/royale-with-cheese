@@ -159,10 +159,12 @@ header .recommendation-item p {
   margin-bottom: 0;
 }
 header .recommendation-row {
-  margin-top: 5px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.7);
-  padding-bottom: 5px;
-  margin-left: 5px;
+  padding: 5px 0 5px 5px;
+}
+header .recommendation-row.selected {
+  background: white;
+  font-weight: bold;
 }
 
 @media (max-width: 40.0rem) { /* Small devices (landscape phones, 576px and up) */

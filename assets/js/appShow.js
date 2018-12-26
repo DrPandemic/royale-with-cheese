@@ -1,8 +1,9 @@
 require("babel-polyfill");
-import {preselectForm, fillSearchRecommendation, fillRealm} from './topBar';
+import {preselectForm, fillSearchRecommendation, fillRealm, registerArrows} from './topBar';
 import {displayGraph} from './graph';
 
 preselectForm();
+registerArrows();
 
 document.getElementById("item-name").addEventListener("input", fillSearchRecommendation);
 document.getElementById("item-name").addEventListener("click", fillSearchRecommendation);

@@ -8,6 +8,7 @@ defmodule Wow.Jobs.IconCrawler do
   @spec perform([{:name, String.t} | {:size, String.t}]) :: :ok
   def perform(name: name, size: size) do
     with_logs(fn ->
+      IO.puts("Fetching #{size} #{name}")
       Application.ensure_all_started :inets
 
       client = Tesla.client([Tesla.Middleware.Compression])

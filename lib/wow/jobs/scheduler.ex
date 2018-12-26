@@ -25,7 +25,6 @@ defmodule Wow.Jobs.Scheduler do
   def schedule_item_icons(size) do
     if size == "36" || size == "56" do
       result = Wow.Item.find_distinct_icons
-      IO.inspect result
       result |> Enum.each(fn(name) -> Toniq.enqueue(Wow.Jobs.IconCrawler, name: name, size: size) end)
 
       :ok

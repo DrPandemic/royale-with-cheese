@@ -1,8 +1,23 @@
 import moment from 'moment';
 const outlierTreshold = 0.5;
+const defaultFormat = {
+  boxpoints: 'all',
+  type: 'box',
+  jitter: 0.3,
+  pointpos: -1.5,
+};
+const defaultMarker = {
+  color: 'rgb(8,81,156)',
+  outliercolor: 'rgba(215, 40, 40, 0.1)',
+  line: {
+    outliercolor: 'rgba(215, 40, 40, 0.1)',
+    outlierwidth: 20
+  }
+};
 
 export function boxplot7D(entries, format) {
   let data = [];
+  let dates = [];
   for (const i in entries) {
     if (!data[i]) {
       data[i] = [];
@@ -11,9 +26,16 @@ export function boxplot7D(entries, format) {
       if (entry.buyout === 0) {
         continue;
       }
+      dates[i] = moment.utc(entry.dump_timestamp);
       data[i].push(entry.buyout / entry.quantity / 10000);
     }
   }
+
+  if (dates.length === 0) {
+    return [];
+  }
+
+  fillDates(dates);
 
   return data.map(val => {
     const dataNoOutiliers = removeOutliers(val);
@@ -24,28 +46,46 @@ export function boxplot7D(entries, format) {
     return val;
   }).map((val, i) => {
     if (val.length === 0) {
-      return null;
+      return {
+        y: [0],
+        name: dates[i].format(format),
+        line: {
+          width: 0.2
+        },
+        marker: {
+          ...defaultMarker,
+          color: 'rgb(58,131,206)',
+        },
+        ...defaultFormat,
+      };
     }
     return {
       y: val,
-      name: moment.utc(entries[i][0].dump_timestamp).format(format),
-      boxpoints: 'all',
-      jitter: 0.3,
-      pointpos: -1.5,
-      type: 'box',
+      name: dates[i].format(format),
       line: {
         width: 0.5
       },
       marker: {
-        color: 'rgb(8,81,156)',
-        outliercolor: 'rgba(215, 40, 40, 0.1)',
-        line: {
-          outliercolor: 'rgba(215, 40, 40, 0.1)',
-          outlierwidth: 20
-        }
-      }
+        ...defaultMarker
+      },
+      ...defaultFormat
     };
-  }).filter(d => d);
+  });
+}
+
+function fillDates(dates) {
+  let max = dates.length;
+  while (dates.includes(undefined) && --max > 0) {
+    for (let i in dates) {
+      const j = parseInt(i);
+      if (i > 0 && !dates[j - 1]) {
+        dates[j - 1] = dates[i].clone().add(-1, 'days');
+      }
+      if (i < dates.length - 2 && !dates[j + 1]) {
+        dates[j + 1] = dates[i].clone().add(1, 'days');
+      }
+    }
+  }
 }
 
 function removeOutliers(data) {

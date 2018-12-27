@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-mini';
 
 export function chunk(data, days, endDate) {
   if (days > 1) {

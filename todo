@@ -1,6 +1,6 @@
+- Reduce babel polyfill
 - Toggle : Hide single values in graph
 - Toggle outlier supression
-- Graph title
 - Loading "bar" when changing graph type
 - item tooltips
   - clickable items

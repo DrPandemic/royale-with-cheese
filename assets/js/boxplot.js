@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-mini';
 const outlierTreshold = 0.5;
 const defaultFormat = {
   boxpoints: 'all',
@@ -21,6 +21,7 @@ export function boxplot7D(entries, format) {
   for (const i in entries) {
     if (!data[i]) {
       data[i] = [];
+      dates[i] = undefined;
     }
     for (const entry of entries[i]) {
       if (entry.buyout === 0) {
@@ -78,10 +79,10 @@ function fillDates(dates) {
   while (dates.includes(undefined) && --max > 0) {
     for (let i in dates) {
       const j = parseInt(i);
-      if (i > 0 && !dates[j - 1]) {
+      if (j > 0 && !dates[j - 1]) {
         dates[j - 1] = dates[i].clone().add(-1, 'days');
       }
-      if (i < dates.length - 2 && !dates[j + 1]) {
+      if (j < dates.length - 1 && !dates[j + 1]) {
         dates[j + 1] = dates[i].clone().add(1, 'days');
       }
     }
@@ -115,6 +116,7 @@ function percentile(list, n) {
 }
 
 export const layout = {
+  title: 'Median price',
   yaxis: {
     title: 'Price in gold per unit',
   },

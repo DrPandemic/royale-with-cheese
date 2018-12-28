@@ -7,22 +7,24 @@ import {boxplot7D, layout} from "./boxplot";
 import {getUrlParam} from "./topBar";
 
 export async function displayGraph() {
+  document.getElementById("loading-icon").classList.remove("invisible");
   const result = await fetchData();
   showItemInfo(result);
   let data;
   switch(getDuration()) {
   case "1d":
-    data = boxplot7D(chunk(result.entries, 1, moment.utc()), "kk:00");
+    data = boxplot7D(chunk(result.entries, 1, moment.utc()), "kk:00", "hours");
     break;
   case "7d":
-    data = boxplot7D(chunk(result.entries, 7, moment.utc().startOf("day")), "ddd, MMM D");
+    data = boxplot7D(chunk(result.entries, 7, moment.utc().startOf("day")), "ddd, MMM D", "days");
     break;
   case "30d":
-    data = boxplot7D(chunk(result.entries, 30, moment.utc().startOf("day")), "ddd, MMM D");
+    data = boxplot7D(chunk(result.entries, 30, moment.utc().startOf("day")), "ddd, MMM D", "days");
     break;
   }
 
   Plotly.newPlot('boxplot-chart', data, layout);
+  document.getElementById("loading-icon").classList.add("invisible");
 }
 
 function redirectToIndex() {

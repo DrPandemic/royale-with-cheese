@@ -5,6 +5,7 @@
     <option value="7d" selected="selected">7 days</option>
     <option value="30d">30 days</option>
   </select>
+  <i class="loading-icon" id="loading-icon"></i>
 </div>
 
 <h1 id="item-info" style="display:none">
@@ -14,7 +15,7 @@
 <p id="item-count">
 </p>
 
-<div id="boxplot-chart"></div>
+<div id="boxplot-chart" class="boxplot-chart"></div>
 
 <div class="advanced-options" id="advanced-options">
   <div class="advanced-option-toggle" id="advanced-option-toggle">

@@ -9,7 +9,7 @@ const defaultMarker = {
   color: 'rgb(8,81,156)',
 };
 
-export function boxplot7D(entries, format) {
+export function boxplot7D(entries, format, unit) {
   let data = [];
   let dates = [];
   for (const i in entries) {
@@ -30,7 +30,7 @@ export function boxplot7D(entries, format) {
     return [];
   }
 
-  fillDates(dates);
+  fillDates(dates, unit);
 
   return data.map(val => {
     const dataNoOutiliers = removeOutliers(val);
@@ -70,16 +70,16 @@ export function boxplot7D(entries, format) {
   });
 }
 
-function fillDates(dates) {
+function fillDates(dates, unit) {
   let max = dates.length;
   while (dates.includes(undefined) && --max > 0) {
     for (let i in dates) {
       const j = parseInt(i);
       if (j > 0 && !dates[j - 1] && dates[j]) {
-        dates[j - 1] = dates[j].clone().add(-1, 'days');
+        dates[j - 1] = dates[j].clone().add(-1, unit);
       }
       if (j < dates.length - 1 && !dates[j + 1] && dates[j]) {
-        dates[j + 1] = dates[j].clone().add(1, 'days');
+        dates[j + 1] = dates[j].clone().add(1, unit);
       }
     }
   }

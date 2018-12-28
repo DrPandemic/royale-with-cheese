@@ -9,6 +9,7 @@
   + required level
   + buy price
   + sell price
+  + rare
 - New graph types
 - readme
 - Analyze tendencies between weekdays

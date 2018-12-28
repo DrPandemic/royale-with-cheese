@@ -1,4 +1,3 @@
-require("babel-polyfill");
 import {preselectForm, fillSearchRecommendation, fillRealm, registerArrows} from './topBar';
 import {displayGraph} from './graph';
 

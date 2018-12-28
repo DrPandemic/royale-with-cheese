@@ -1,18 +1,12 @@
 import moment from 'moment-mini';
 const outlierTreshold = 0.5;
 const defaultFormat = {
-  boxpoints: 'all',
   type: 'box',
   jitter: 0.3,
   pointpos: -1.5,
 };
 const defaultMarker = {
   color: 'rgb(8,81,156)',
-  outliercolor: 'rgba(215, 40, 40, 0.1)',
-  line: {
-    outliercolor: 'rgba(215, 40, 40, 0.1)',
-    outlierwidth: 20
-  }
 };
 
 export function boxplot7D(entries, format) {
@@ -50,6 +44,7 @@ export function boxplot7D(entries, format) {
       return {
         y: [0],
         name: dates[i].format(format),
+        boxpoints: showSingleValues() ? 'all' : false,
         line: {
           width: 0.2
         },
@@ -63,6 +58,7 @@ export function boxplot7D(entries, format) {
     return {
       y: val,
       name: dates[i].format(format),
+      boxpoints: showSingleValues() ? 'all' : false,
       line: {
         width: 0.5
       },
@@ -79,18 +75,18 @@ function fillDates(dates) {
   while (dates.includes(undefined) && --max > 0) {
     for (let i in dates) {
       const j = parseInt(i);
-      if (j > 0 && !dates[j - 1]) {
-        dates[j - 1] = dates[i].clone().add(-1, 'days');
+      if (j > 0 && !dates[j - 1] && dates[j]) {
+        dates[j - 1] = dates[j].clone().add(-1, 'days');
       }
-      if (j < dates.length - 1 && !dates[j + 1]) {
-        dates[j + 1] = dates[i].clone().add(1, 'days');
+      if (j < dates.length - 1 && !dates[j + 1] && dates[j]) {
+        dates[j + 1] = dates[j].clone().add(1, 'days');
       }
     }
   }
 }
 
 function removeOutliers(data) {
-  if (data.length === 0) {
+  if (data.length === 0 || !outlierSuppressionEnabled()) {
     return data;
   }
   data.sort((a, b) => a - b);
@@ -120,4 +116,12 @@ export const layout = {
   yaxis: {
     title: 'Price in gold per unit',
   },
+}
+
+function outlierSuppressionEnabled() {
+  return document.getElementById('outlier-suppression').checked;
+}
+
+function showSingleValues() {
+  return document.getElementById('show-singles').checked;
 }

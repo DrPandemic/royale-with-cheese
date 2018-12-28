@@ -67,3 +67,8 @@ function showItemInfo(result) {
 export function getIconURL(icon) {
   return `/images/blizzard/icons/36/${icon}.jpg`
 }
+
+export function toggleAdvancedOptions(e) {
+  const container = document.getElementById("advanced-options");
+  container.classList.toggle('opened')
+}

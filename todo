@@ -1,6 +1,4 @@
-- Reduce babel polyfill
-- Toggle : Hide single values in graph
-- Toggle outlier supression
+- Reduce bundle size
 - Loading "bar" when changing graph type
 - item tooltips
   - clickable items

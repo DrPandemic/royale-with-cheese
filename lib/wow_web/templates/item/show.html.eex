@@ -16,4 +16,14 @@
 
 <div id="boxplot-chart"></div>
 
+<div class="advanced-options" id="advanced-options">
+  <div class="advanced-option-toggle" id="advanced-option-toggle">
+    <i class="angle-right-icon" id="advanced-option-icon"></i> Advanced options
+  </div>
+  <div class="advanced-option-settings">
+    <label for="outlier-suppression"><input checked type="checkbox" id="outlier-suppression"> Enable outlier suppression</label>
+    <label for="show-singles"><input type="checkbox" id="show-singles"> Show single values</label>
+  </div>
+</div>
+
 <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/appShow.js") %>" async="true"></script>

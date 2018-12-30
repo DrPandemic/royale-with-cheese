@@ -46,6 +46,7 @@ config :wow, WowWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
+# Google analytics
 config :wow, WowWeb.Endpoint,
   live_reload: [
     patterns: [
@@ -54,7 +55,8 @@ config :wow, WowWeb.Endpoint,
       ~r{lib/wow_web/views/.*(ex)$},
       ~r{lib/wow_web/templates/.*(eex)$}
     ]
-  ]
+  ],
+  ga_id: nil
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n", level: :info

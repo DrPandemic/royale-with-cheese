@@ -1,4 +1,3 @@
-- Reduce bundle size
 - item tooltips
   - clickable items
   + item level
@@ -7,9 +6,10 @@
   + buy price
   + sell price
   + rare
-- New graph types
 - readme
+  - defines every env files
 - Analyze tendencies between weekdays
-~ Google Ads
-~ Google analytics
 - Profesion buying guide
+- Reduce bundle size
+~ Google Ads
+- New graph types

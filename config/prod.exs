@@ -78,4 +78,5 @@ config :wow, Wow.Repo,
 config :toniq, redis_url: "redis://redis:#{System.get_env("REDIS_PASSWORD")}@redis:6379/0"
 
 config :wow, WowWeb.Endpoint,
-  secret_key_base: System.get_env("SECRET_KEY_BASE")
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
+  ga_id: System.get_env("GA_ID")

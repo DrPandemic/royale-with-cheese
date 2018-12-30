@@ -86,7 +86,6 @@ export function fillSearchRecommendation() {
     const items = await fetch(`${recommendationURL}${qs.stringify({item_name: name})}`).then(r => r.json())
 
     while (recommendationContainer.firstChild) {
-      recommendationContainer.firstChild.removeEventListener("click", recommendationClick);
       recommendationContainer.removeChild(recommendationContainer.firstChild);
     }
 
@@ -99,19 +98,10 @@ export function fillSearchRecommendation() {
     recommendationContainer.scrollTop = 0;
 
     for (const item of items) {
-      const newNode = document.getElementById("recommendation-template").cloneNode(true);
-      newNode.addEventListener("click", recommendationClick);
-      newNode.id = "";
-      newNode.style.display = "";
-
-      const icon = newNode.getElementsByClassName("recommendation-icon")[0];
-      icon.src = getIconURL(item.icon);
-
-      const nameTemplate = newNode.getElementsByClassName("recommendation-name")[0];
-      nameTemplate.innerText = item.name;
-      newNode.dataset.itemName = item.name;
-
-      recommendationContainer.appendChild(newNode);
+      const el = document.createElement("recommendation-item");
+      el.iconSrc = getIconURL(item.icon);
+      el.name = item.name;
+      recommendationContainer.appendChild(el);
     }
   }, 500);
 }
@@ -135,12 +125,7 @@ function hideOnClickOutside(element) {
   document.addEventListener("click", outsideClickListener);
 }
 
-function recommendationClick(e) {
-  const itemName = e.target.closest(".recommendation-row").dataset.itemName;
-  gotoItem(itemName);
-}
-
-function gotoItem(itemName) {
+export function gotoItem(itemName) {
   const params = {
     item_name: itemName,
     region: getMenuRegion(),
@@ -154,20 +139,20 @@ export function registerArrows() {
 }
 
 function onKeyDown(e) {
-  if (!isVisible(recommendationContainer) || !['ArrowUp', 'ArrowDown', 'Enter'].includes(e.key)) {
+  if (!isVisible(recommendationContainer) || !["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
     return;
   }
-  const index = Array.from(recommendationContainer.childNodes).findIndex(c => c.classList.contains('selected'));
+  const index = Array.from(recommendationContainer.childNodes).findIndex(c => c.selected());
   let nextIndex = 0;
 
   switch(e.key) {
-  case 'ArrowUp':
+  case "ArrowUp":
     nextIndex = (index - 1) < 0 ? recommendationContainer.childNodes.length - 1 : index - 1;
     break;
-  case 'ArrowDown':
+  case "ArrowDown":
     nextIndex = (index + 1) % recommendationContainer.childNodes.length;
     break;
-  case 'Enter':
+  case "Enter":
     if (index !== -1) {
       e.preventDefault();
     }
@@ -177,9 +162,9 @@ function onKeyDown(e) {
 
   // Change classes
   for(const e of recommendationContainer.childNodes) {
-    e.classList.remove('selected');
+    e.unselect();
   }
-  recommendationContainer.childNodes[nextIndex].classList.add('selected');
+  recommendationContainer.childNodes[nextIndex].select();
 
   // Scroll recommendation
   // The result is not super natural, but good enough.

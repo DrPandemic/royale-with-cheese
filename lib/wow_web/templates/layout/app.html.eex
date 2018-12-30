@@ -24,12 +24,6 @@
               </select>
             </div>
             <div>
-              <div id="recommendation-template" style="display: none" class="recommendation-row">
-                <div class="recommendation-item">
-                  <img class="recommendation-icon" src=""/>
-                  <p class="recommendation-name"></p>
-                </div>
-              </div>
               <input type="text" class="search-box" name="item_name" id="item-name" placeholder="Object's name" required>
               <div id="recommendation-box" class="recommendation-box" style="display: none;">
               </div>

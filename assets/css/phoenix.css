@@ -36,9 +36,6 @@ body {
 .home-container h2 {
   margin-bottom: 0;
 }
-.home-container .home-item {
-  margin: 0 0 15px 20px;
-}
 
 select {
   width: auto;

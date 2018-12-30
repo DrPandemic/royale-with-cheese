@@ -1,6 +1,6 @@
 import {preselectForm, fillSearchRecommendation, fillRealm, registerArrows} from './topBar';
 import {displayGraph, toggleAdvancedOptions, toggleOutlierSuppression, toggleShowSingles} from './graph';
-import {register as recommendationRegister} from "./recommendationItem";
+import {register} from "./webComponents";
 
 preselectForm();
 registerArrows();
@@ -16,4 +16,4 @@ document.getElementById("advanced-option-toggle").addEventListener("click", togg
 document.getElementById("outlier-suppression").addEventListener("change", async () => { await displayGraph(); });
 document.getElementById("show-singles").addEventListener("change", async () => { await displayGraph(); });
 
-recommendationRegister();
+register();

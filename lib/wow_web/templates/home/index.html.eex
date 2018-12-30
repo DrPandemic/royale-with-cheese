@@ -2,29 +2,21 @@
   <div>
     <h1>Most expensive items in the last day</h1>
     <%= Enum.map(@most_expensive_items, fn item -> %>
-      <div class="home-item">
-        <h2>
-          <img id="item-icon" src="/images/blizzard/icons/36/<%= item.icon %>.jpg"/>
-          <span id="item-name-display"><%= item.name %></span>
-        </h2>
-        <span>
-          It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.
-        </span>
-      </div>
+      <wow-item
+        icon="/images/blizzard/icons/36/<%= item.icon %>.jpg"
+        name="<%= item.name %>"
+        text="It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.">
+      </wow-item>
     <% end) %>
   </div>
   <div>
     <h1>Most present items in the last day</h1>
     <%= Enum.map(@most_present_items, fn item -> %>
-      <div class="home-item">
-        <h2>
-          <img id="item-icon" src="/images/blizzard/icons/36/<%= item.icon %>.jpg"/>
-          <span id="item-name-display"><%= item.name %></span>
-        </h2>
-        <span>
-          It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.
-        </span>
-      </div>
+      <wow-item
+        icon="/images/blizzard/icons/36/<%= item.icon %>.jpg"
+        name="<%= item.name %>"
+        text="It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.">
+      </wow-item>
     <% end) %>
   </div>
 </div>

@@ -99,7 +99,7 @@ export function fillSearchRecommendation() {
 
     for (const item of items) {
       const el = document.createElement("recommendation-item");
-      el.iconSrc = getIconURL(item.icon);
+      el.icon = getIconURL(item.icon);
       el.name = item.name;
       recommendationContainer.appendChild(el);
     }

@@ -1,5 +1,4 @@
 import moment from 'moment-mini';
-const outlierTreshold = 0.5;
 const defaultFormat = {
   type: 'box',
   jitter: 0.3,
@@ -32,14 +31,8 @@ export function boxplot7D(entries, format, unit) {
 
   fillDates(dates, unit);
 
-  return data.map(val => {
-    const dataNoOutiliers = removeOutliers(val);
-    // Prevent the outlier detection from removing everything. This is an issue with the pet cage
-    if (dataNoOutiliers.length > val.length * outlierTreshold) {
-      return dataNoOutiliers;
-    }
-    return val;
-  }).map((val, i) => {
+  return data.map(removeOutliers)
+    .map((val, i) => {
     if (val.length === 0) {
       return {
         y: [0],

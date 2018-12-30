@@ -18,7 +18,6 @@ style.textContent = `.item {
   align-items: center;
 }
 .name {
-  white-space: nowrap;
   overflow: hidden;
   margin-bottom: 0;
 }
@@ -32,10 +31,10 @@ style.textContent = `.item {
 }
 `;
 
-export class RecommendationItem extends HTMLElement {
+class RecommendationItem extends HTMLElement {
   constructor() {
     super();
-    this.iconSrc = "";
+    this.icon = "";
     this.name = "";
     this.gotoItem = this.gotoItem.bind(this);
     this.select = this.select.bind(this);
@@ -44,7 +43,7 @@ export class RecommendationItem extends HTMLElement {
   }
 
   connectedCallback() {
-    this.iconSrc = this.getAttribute("iconSrc") || this.iconSrc;
+    this.icon = this.getAttribute("icon") || this.icon;
     this.name = this.getAttribute("name") || this.name;
 
     if (!this.shadowRoot) {
@@ -57,7 +56,7 @@ export class RecommendationItem extends HTMLElement {
       this.shadowRoot.addEventListener("click", this.gotoItem);
     }
 
-    this.shadowIcon.src = this.iconSrc;
+    this.shadowIcon.src = this.icon;
     this.shadowName.innerText = this.name;
     this.shadowName.dataset.itemName = this.name;
   }

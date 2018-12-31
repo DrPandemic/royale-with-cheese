@@ -3,9 +3,7 @@
   + item level
   + description
   + required level
-  + buy price
-  + sell price
-  + rare
+  + quality
 - readme
   - defines every env files
 - Analyze tendencies between weekdays
@@ -14,3 +12,4 @@
 ~ Google Ads
 - New graph types
 - Move old data to another table? Or just delete it
+- Use median on home page

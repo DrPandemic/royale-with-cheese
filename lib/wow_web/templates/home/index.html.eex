@@ -3,8 +3,7 @@
     <h1>Most expensive items in the last day</h1>
     <%= Enum.map(@most_expensive_items, fn item -> %>
       <wow-item
-        icon="/images/blizzard/icons/36/<%= item.icon %>.jpg"
-        name="<%= item.name %>"
+        item="<%= Phoenix.json_library.encode_to_iodata!(item) %>"
         text="It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.">
       </wow-item>
     <% end) %>
@@ -13,8 +12,7 @@
     <h1>Most present items in the last day</h1>
     <%= Enum.map(@most_present_items, fn item -> %>
       <wow-item
-        icon="/images/blizzard/icons/36/<%= item.icon %>.jpg"
-        name="<%= item.name %>"
+        item="<%= Phoenix.json_library.encode_to_iodata!(item) %>"
         text="It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.">
       </wow-item>
     <% end) %>

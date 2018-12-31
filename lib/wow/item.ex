@@ -12,16 +12,31 @@ defmodule Wow.Item do
   @type raw_entry :: %{optional(String.t) => String.t}
   @type t :: Ecto.Schema.t
 
-  @derive {Jason.Encoder, only: [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable]}
+  @derive {Jason.Encoder, only: [:id, :name, :icon, :buy_price, :sell_price,
+    :is_auctionable, :item_level, :required_level, :quality, :description]}
   schema "item" do
     field :name, :string
     field :icon, :string
     field :buy_price, :integer
     field :sell_price, :integer
     field :is_auctionable, :boolean
+    field :item_level, :integer
+    field :required_level, :integer
+    field :quality, :integer
+    field :description, :string
     field :blob, :map
 
     timestamps()
+  end
+
+  defp validate_not_nil(changeset, fields) do
+    Enum.reduce(fields, changeset, fn field, changeset ->
+      if get_field(changeset, field) == nil do
+        add_error(changeset, field, "nil")
+      else
+        changeset
+      end
+    end)
   end
 
   @spec create_item(map) :: t
@@ -34,8 +49,11 @@ defmodule Wow.Item do
   @spec changeset(t, map) :: Ecto.Changeset.t
   def changeset(%Wow.Item{} = entry, params \\ %{}) do
     entry
-    |> cast(params, [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable, :blob])
-    |> validate_required([:id, :name, :icon, :buy_price, :sell_price, :is_auctionable, :blob])
+    |> cast(params, [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable,
+      :item_level, :required_level, :quality, :description, :blob])
+    |> validate_required([:id, :name, :icon, :buy_price, :sell_price, :is_auctionable,
+      :item_level, :required_level, :quality, :blob])
+    |> validate_not_nil([:description])
     |> unique_constraint(:item_item_name_gin_index_index)
   end
 
@@ -48,6 +66,10 @@ defmodule Wow.Item do
       buy_price: item["buyPrice"],
       sell_price: item["sellPrice"],
       is_auctionable: item["isAuctionable"],
+      item_level: item["itemLevel"],
+      required_level: item["requiredLevel"],
+      quality: item["quality"],
+      description: item["description"],
       blob: item
     } |> changeset
   end

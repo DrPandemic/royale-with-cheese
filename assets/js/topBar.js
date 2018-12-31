@@ -156,7 +156,7 @@ function onKeyDown(e) {
     if (index !== -1) {
       e.preventDefault();
     }
-    gotoItem(recommendationContainer.childNodes[index].dataset.itemName);
+    recommendationContainer.childNodes[index].gotoItem();
     return;
   }
 

@@ -9,6 +9,9 @@ const defaultMarker = {
 };
 
 export function boxplot7D(entries, format, unit) {
+  if (entries.every(e => e.length === 0)) {
+    return [];
+  }
   let data = [];
   let dates = [];
   for (const i in entries) {

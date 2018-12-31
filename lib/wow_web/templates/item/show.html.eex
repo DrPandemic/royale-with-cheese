@@ -8,12 +8,11 @@
   <i class="loading-icon" id="loading-icon"></i>
 </div>
 
-<h1 id="item-info" style="display:none">
-  <img id="item-icon" src=""/>
-  <span id="item-name-display"></span>
-</h1>
-<p id="item-count">
-</p>
+<wow-item
+  id="item-info"
+  item="{}"
+  text="">
+</wow-item>
 
 <div id="boxplot-chart" class="boxplot-chart"></div>
 

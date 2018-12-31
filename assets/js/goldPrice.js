@@ -1,6 +1,7 @@
 const template = document.createElement("template");
 template.innerHTML = `
-<div class="container">
+<div class="container" id="container">
+  Sell Price: 
   <span id="gold" class="gold"></span>
   <span id="silver" class="silver"></span>
   <span id="copper" class="copper"></span>
@@ -24,6 +25,9 @@ style.textContent = `
   background-image: url('/images/blizzard/icons/money-copper.gif');
   padding-right: 15px;
 }
+.hidden {
+  display: none;
+}
 `;
 
 class GoldPrice extends HTMLElement {
@@ -46,9 +50,24 @@ class GoldPrice extends HTMLElement {
 
   render() {
     if (this.shadowRoot) {
-      this.shadowRoot.getElementById("gold").innerText = Math.floor(this.value / 10000);
-      this.shadowRoot.getElementById("silver").innerText = Math.floor((this.value / 100) % 100);
-      this.shadowRoot.getElementById("copper").innerText = Math.floor((this.value) % 100);
+      if (this.value == 0) {
+        this.shadowRoot.getElementById("container").classList.add("hidden");
+      } else {
+        this.shadowRoot.getElementById("container").classList.remove("hidden");
+        const gold = Math.floor(this.value / 10000);
+        const silver = Math.floor((this.value / 100) % 100);
+        if (gold <= 0) {
+          this.shadowRoot.getElementById("gold").classList.add("hidden");
+        } else {
+          this.shadowRoot.getElementById("gold").innerText = gold;
+        }
+        if (gold <= 0 && silver <= 0) {
+          this.shadowRoot.getElementById("silver").classList.add("hidden");
+        } else {
+          this.shadowRoot.getElementById("silver").innerText = silver;
+        }
+        this.shadowRoot.getElementById("copper").innerText = Math.floor((this.value) % 100);
+      }
     }
   }
 

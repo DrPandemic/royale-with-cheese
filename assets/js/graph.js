@@ -51,19 +51,16 @@ async function fetchData() {
 
 function showItemInfo(result) {
   const info = document.getElementById("item-info");
-  const icon = document.getElementById("item-icon");
-  const name = document.getElementById("item-name-display");
 
-  info.style.display = "";
-  icon.src = getIconURL(result.item.icon);
-  name.innerText = result.item.name;
+  info.setAttribute("item", JSON.stringify(result.item));
 
-  const count = document.getElementById("item-count");
+  let text;
   if (result.entries.data.length == result.entries.initial_count) {
-    count.innerText = `${result.entries.data.length} auction entries were analyzed.`;
+    info.setAttribute("text", `${result.entries.data.length} auction entries were analyzed.`);
   } else {
-    count.innerText = `${result.entries.data.length} auction entries were analyzed. They were randomly sampled from ${result.entries.initial_count} entries.`;
+    info.setAttribute("text", `${result.entries.data.length} auction entries were analyzed. They were randomly sampled from ${result.entries.initial_count} entries.`);
   }
+
 }
 
 export function getIconURL(icon) {

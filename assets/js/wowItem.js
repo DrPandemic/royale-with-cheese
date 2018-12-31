@@ -43,6 +43,7 @@ style.textContent = `
 }
 
 .tooltip {
+  max-width: 300px;
   top: -3px;
   left: 38px;
   background-color: #090d20;
@@ -101,12 +102,10 @@ class WowItem extends HTMLElement {
     this.item = {};
     this.text = "";
     this.gotoItem = this.gotoItem.bind(this);
+    this.render = this.render.bind(this);
   }
 
   connectedCallback() {
-    this.item = JSON.parse(this.getAttribute("item")) || this.icon;
-    this.text = this.getAttribute("text") || this.text;
-
     if (!this.shadowRoot) {
       this.attachShadow({mode: 'open'});
       this.shadowRoot.appendChild(style.cloneNode(true));
@@ -118,18 +117,32 @@ class WowItem extends HTMLElement {
       this.shadowItem.addEventListener("click", this.gotoItem);
     }
 
-    this.shadowIcon.src = `/images/blizzard/icons/36/${this.item.icon}.jpg`;
-    this.shadowName.innerText = this.item.name;
-    this.shadowText.innerHTML = this.text;
+    this.render();
+  }
 
-    this.shadowRoot.getElementById("t-name").classList.add(`quality-${this.item.quality || 3}`);
-    this.shadowRoot.getElementById("t-name").innerText = this.item.name;
-    this.shadowRoot.getElementById("t-item-level").innerText = `Item Level ${this.item.item_level || 42}`;
-    if (this.item.description !== "") {
-      this.shadowRoot.getElementById("t-description").innerText = `"${this.item.description || "foo bar"}"`;
+  render() {
+    this.item = JSON.parse(this.getAttribute("item")) || this.icon;
+    if (Object.keys(this.item).length === 0) {
+      return;
     }
-    this.shadowRoot.getElementById("t-requires-level").innerText = `Requires level ${this.item.requires_level || 42}`;
-    this.shadowRoot.getElementById("t-price").setAttribute("value", this.item.sell_price || 123456789);
+    this.text = this.getAttribute("text") || this.text;
+
+    if (this.shadowRoot) {
+      this.shadowIcon.src = `/images/blizzard/icons/36/${this.item.icon}.jpg`;
+      this.shadowName.innerText = this.item.name;
+      this.shadowText.innerHTML = this.text;
+
+      this.shadowRoot.getElementById("t-name").classList.add(`quality-${this.item.quality}`);
+      this.shadowRoot.getElementById("t-name").innerText = this.item.name;
+      this.shadowRoot.getElementById("t-item-level").innerText = `Item Level ${this.item.item_level}`;
+      if (this.item.description !== "") {
+        this.shadowRoot.getElementById("t-description").innerText = `"${this.item.description}"`;
+      }
+      if (this.item.required_level > 0) {
+        this.shadowRoot.getElementById("t-requires-level").innerText = `Requires level ${this.item.required_level}`;
+      }
+      this.shadowRoot.getElementById("t-price").setAttribute("value", this.item.sell_price);
+    }
   }
 
   disconnectedCallback() {
@@ -138,6 +151,12 @@ class WowItem extends HTMLElement {
 
   gotoItem() {
     gotoItem(this.item.name)
+  }
+
+  static get observedAttributes() { return ["item", "text"]; }
+  attributeChangedCallback(name, oldValue, newValue) {
+    this[name] = newValue;
+    this.render();
   }
 }
 

@@ -92,7 +92,18 @@ defmodule Wow.AuctionBid do
     }
   end
 
-  @spec most_expensive_items :: [%{id: integer, name: String.t, icon: String.t, price: float, count: integer}]
+  @spec most_expensive_items :: [%{
+                                    id: integer,
+                                    name: String.t,
+                                    icon: String.t,
+                                    price: float,
+                                    sell_price: integer,
+                                    item_level: integer,
+                                    required_level: integer,
+                                    quality: integer,
+                                    description: String.t,
+                                    count: integer
+                                 }]
   def most_expensive_items do
     lower = Timex.now |> Timex.shift(days: -1)
     upper = Timex.now
@@ -104,17 +115,39 @@ defmodule Wow.AuctionBid do
       limit: 3,
       order_by: [desc: avg(entry.buyout / entry.quantity)],
       group_by: [item.id, item.name, item.icon],
-      select: {item.id, item.name, item.icon, avg(entry.buyout / entry.quantity), count(item.id)}
+      select: {
+        item.id,
+        item.name,
+        item.icon,
+        avg(entry.buyout / entry.quantity),
+        item.sell_price,
+        item.item_level,
+        item.required_level,
+        item.quality,
+        item.description,
+        count(item.id)
+      }
 
     query
     |> Repo.all
-    |> Enum.map(fn ({id, name, icon, price, count}) ->
+    |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
       {price, _} = Integer.parse(Decimal.to_string(price))
-      %{id: id, name: name, icon: icon, price: price, count: count}
+      %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
     end)
   end
 
-  @spec most_present_items :: [%{id: integer, name: String.t, icon: String.t, price: float}]
+  @spec most_present_items :: [%{
+                                  id: integer,
+                                  name: String.t,
+                                  icon: String.t,
+                                  price: float,
+                                  sell_price: integer,
+                                  item_level: integer,
+                                  required_level: integer,
+                                  quality: integer,
+                                  description: String.t,
+                                  count: integer
+                               }]
   def most_present_items do
     lower = Timex.now |> Timex.shift(days: -1)
     upper = Timex.now
@@ -125,13 +158,24 @@ defmodule Wow.AuctionBid do
       limit: 3,
       order_by: [desc: count(item.id)],
       group_by: [item.id, item.name, item.icon],
-      select: {item.id, item.name, item.icon, avg(entry.buyout / entry.quantity), count(item.id)}
+      select: {
+        item.id,
+        item.name,
+        item.icon,
+        avg(entry.buyout / entry.quantity),
+        item.sell_price,
+        item.item_level,
+        item.required_level,
+        item.quality,
+        item.description,
+        count(item.id)
+      }
 
     query
     |> Repo.all
-    |> Enum.map(fn ({id, name, icon, price, count}) ->
+    |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
       {price, _} = Integer.parse(Decimal.to_string(price))
-      %{id: id, name: name, icon: icon, price: price, count: count}
+      %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
     end)
   end
 end

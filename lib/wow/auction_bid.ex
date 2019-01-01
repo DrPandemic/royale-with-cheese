@@ -105,7 +105,7 @@ defmodule Wow.AuctionBid do
                                     count: integer
                                  }]
   def most_expensive_items do
-    lower = Timex.now |> Timex.shift(days: -1)
+    lower = Timex.now |> Timex.shift(hours: -24)
     upper = Timex.now
     query = from entry in Wow.AuctionBid,
       inner_join: item in assoc(entry, :item),
@@ -149,7 +149,7 @@ defmodule Wow.AuctionBid do
                                   count: integer
                                }]
   def most_present_items do
-    lower = Timex.now |> Timex.shift(days: -1)
+    lower = Timex.now |> Timex.shift(hours: -24)
     upper = Timex.now
     query = from entry in Wow.AuctionBid,
       inner_join: item in assoc(entry, :item),

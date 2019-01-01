@@ -5,6 +5,7 @@
   + required level
   + quality
 - Missing cache on home
+- Add median curve on current graph
 - readme
   - defines every env files
 - Analyze tendencies between weekdays

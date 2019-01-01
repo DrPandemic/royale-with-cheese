@@ -11,9 +11,9 @@ defmodule WowWeb.ItemController do
     duration = Map.get(params, "duration", "7d")
     response = Cache.get_or_run({__MODULE__, :show_json, {region, realm, item_name, duration}}, fn ->
       start_date = case duration do
-        "1d" ->  Timex.now |> Timex.shift(days: -1)
-        "7d" ->  Timex.now |> Timex.shift(days: -6)
-        "30d" -> Timex.now |> Timex.shift(days: -29)
+        "1d" ->  Timex.now |> Timex.shift(hours: -24)
+        "7d" ->  Timex.now |> Timex.shift(hours: -24 * 6)
+        "30d" -> Timex.now |> Timex.shift(hours: -24 * 29)
       end
       item = List.first(Item.find_similar_to_name(item_name))
       entries = AuctionBid.find_by_item_id_with_sampling(item.id, region, realm, 1000, start_date)

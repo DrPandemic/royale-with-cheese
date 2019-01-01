@@ -1,11 +1,11 @@
 const template = document.createElement("template");
 template.innerHTML = `
-<div class="container" id="container">
-  Sell Price: 
+<span class="container" id="container">
+  <span id="text">Sell Price: </span>
   <span id="gold" class="gold"></span>
   <span id="silver" class="silver"></span>
   <span id="copper" class="copper"></span>
-</div>
+</span>
 `;
 
 const style = document.createElement("style");
@@ -34,11 +34,13 @@ class GoldPrice extends HTMLElement {
   constructor() {
     super();
     this.value = 0;
+    this.text = 'true';
     this.render = this.render.bind(this);
   }
 
   connectedCallback() {
     this.value = this.getAttribute("value") || this.value;
+    this.text = this.getAttribute("text") || this.text;
 
     if (!this.shadowRoot) {
       this.attachShadow({mode: 'open'});
@@ -54,6 +56,11 @@ class GoldPrice extends HTMLElement {
         this.shadowRoot.getElementById("container").classList.add("hidden");
       } else {
         this.shadowRoot.getElementById("container").classList.remove("hidden");
+        if (this.text == "false") {
+          this.shadowRoot.getElementById("text").classList.add("hidden");
+        } else {
+          this.shadowRoot.getElementById("text").classList.remove("hidden");
+        }
         const gold = Math.floor(this.value / 10000);
         const silver = Math.floor((this.value / 100) % 100);
         if (gold <= 0) {
@@ -71,9 +78,13 @@ class GoldPrice extends HTMLElement {
     }
   }
 
-  static get observedAttributes() { return ["value"]; }
+  static get observedAttributes() { return ["value", "text"]; }
   attributeChangedCallback(name, oldValue, newValue) {
-    this.value = parseInt(newValue);
+    if (name === "value") {
+      this.value = parseInt(newValue);
+    } else {
+      this[name] = newValue;
+    }
     this.render();
   }
 }

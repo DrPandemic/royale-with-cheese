@@ -69,9 +69,18 @@ defmodule Wow.Item do
       item_level: item["itemLevel"],
       required_level: item["requiredLevel"],
       quality: item["quality"],
-      description: item["description"],
+      description: get_description(item),
       blob: item
     } |> changeset
+  end
+
+  @spec get_description(raw_entry) :: String.t
+  defp get_description(item) do
+    if item["description"] != "" || (item |> Map.get("itemSpells", []) |> length) == 0 do
+      item["description"]
+    else
+      item["itemSpells"] |> hd |> Map.get("scaledDescription", "")
+    end
   end
 
   @spec find(integer) :: t

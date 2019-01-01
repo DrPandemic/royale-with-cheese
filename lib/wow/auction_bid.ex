@@ -114,7 +114,7 @@ defmodule Wow.AuctionBid do
         and entry.first_dump_timestamp <= ^upper,
       having: count(entry.item_id) > 50,
       limit: 3,
-      order_by: [desc: avg(entry.buyout / entry.quantity)],
+      order_by: [desc: fragment("median(buyout / quantity)::bigint")],
       group_by: [item.id, item.name, item.icon],
       select: {
         item.id,

@@ -1,10 +1,4 @@
-- item tooltips
-  - clickable items
-  + item level
-  + description
-  + required level
-  + quality
-- Sometimes, some data is not shown on graphs
+- logo
 - Add median curve on current graph
 - readme
   - defines every env files

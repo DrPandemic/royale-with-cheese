@@ -92,7 +92,7 @@ function removeOutliers(data) {
   const q3 = percentile(data, 75);
   const iqr = (q3 - q1) * 1.5;
 
-  return data.filter(e => e > q1 - iqr && e < q3 + iqr);
+  return data.filter(e => e >= q1 - iqr && e <= q3 + iqr);
 }
 
 function percentile(list, n) {

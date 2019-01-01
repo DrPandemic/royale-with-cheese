@@ -4,7 +4,7 @@
     <%= Enum.map(@most_expensive_items, fn item -> %>
       <wow-item
         item="<%= Phoenix.json_library.encode_to_iodata!(item) %>"
-        text="It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.">
+        text="It was sold <b><%= item.count %></b> times at an median price of <b><%= round(item.price / 10000) %> gold</b>.">
       </wow-item>
     <% end) %>
   </div>
@@ -13,7 +13,7 @@
     <%= Enum.map(@most_present_items, fn item -> %>
       <wow-item
         item="<%= Phoenix.json_library.encode_to_iodata!(item) %>"
-        text="It was sold <b><%= item.count %></b> times at an average price of <b><%= round(item.price / 10000) %> gold</b>.">
+        text="It was sold <b><%= item.count %></b> times at an median price of <b><%= round(item.price / 10000) %> gold</b>.">
       </wow-item>
     <% end) %>
   </div>

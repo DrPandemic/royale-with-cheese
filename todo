@@ -4,7 +4,7 @@
   + description
   + required level
   + quality
-- Missing cache on home
+- Sometimes, some data is not shown on graphs
 - Add median curve on current graph
 - readme
   - defines every env files

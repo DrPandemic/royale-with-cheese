@@ -21,7 +21,7 @@ services:
       - MIX_ENV=prod
 
   database:
-    image: postgres:latest
+    image: drpandemic/royale-with-cheese-db
     env_file:
       - .env
     volumes:

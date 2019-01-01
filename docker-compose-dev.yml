@@ -18,7 +18,7 @@ services:
       - POSTGRES_PASSWORD=password
 
   database:
-    image: postgres:latest
+    image: drpandemic/royale-with-cheese-db
     environment:
       - POSTGRES_PASSWORD=password
     ports:
@@ -28,15 +28,6 @@ services:
         limits:
           memory: 2GB
           cpus: "2"
-
-  mongo:
-    image: postgres:latest
-    ports:
-      - 27017:27017
-    deploy:
-      resources:
-        limits:
-          memory: 12GB
 
   redis:
     image: redis

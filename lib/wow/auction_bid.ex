@@ -119,7 +119,7 @@ defmodule Wow.AuctionBid do
         item.id,
         item.name,
         item.icon,
-        avg(entry.buyout / entry.quantity),
+        fragment("median(buyout / quantity)::bigint"),
         item.sell_price,
         item.item_level,
         item.required_level,
@@ -131,7 +131,6 @@ defmodule Wow.AuctionBid do
     query
     |> Repo.all
     |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
-      {price, _} = Integer.parse(Decimal.to_string(price))
       %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
     end)
   end
@@ -162,7 +161,7 @@ defmodule Wow.AuctionBid do
         item.id,
         item.name,
         item.icon,
-        avg(entry.buyout / entry.quantity),
+        fragment("median(buyout / quantity)::bigint"),
         item.sell_price,
         item.item_level,
         item.required_level,
@@ -174,7 +173,6 @@ defmodule Wow.AuctionBid do
     query
     |> Repo.all
     |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
-      {price, _} = Integer.parse(Decimal.to_string(price))
       %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
     end)
   end

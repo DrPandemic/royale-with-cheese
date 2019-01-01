@@ -6,6 +6,7 @@ defmodule Wow.AuctionBid do
 
   alias Wow.Repo
   use Ecto.Schema
+  use Memoize
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
@@ -104,7 +105,7 @@ defmodule Wow.AuctionBid do
                                     description: String.t,
                                     count: integer
                                  }]
-  def most_expensive_items do
+  defmemo most_expensive_items, expires_in: 30 * 60 * 1000 do
     lower = Timex.now |> Timex.shift(hours: -24)
     upper = Timex.now
     query = from entry in Wow.AuctionBid,
@@ -147,7 +148,7 @@ defmodule Wow.AuctionBid do
                                   description: String.t,
                                   count: integer
                                }]
-  def most_present_items do
+  defmemo most_present_items, expires_in: 30 * 60 * 1000 do
     lower = Timex.now |> Timex.shift(hours: -24)
     upper = Timex.now
     query = from entry in Wow.AuctionBid,

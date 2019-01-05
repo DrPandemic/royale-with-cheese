@@ -12,7 +12,7 @@ services:
   web:
     image: drpandemic/royale-with-cheese-web
     tty: true
-    command: ["mix", "phx.server"]
+    command: ["elixir", "--name", "server@127.0.0.1", "-S", "mix", "phx.server"]
     env_file:
       - blizzard.env
       - phx.env

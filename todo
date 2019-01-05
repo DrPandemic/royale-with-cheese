@@ -1,3 +1,7 @@
+~ Approximate which bid where bought
+- Split between horde and alliance
+- After 2 days up, the server was hanging on home
+  - Opened remote conenctions
 - Analyze tendencies between weekdays
 - Profesion buying guide
 - Reduce bundle size
@@ -7,3 +11,5 @@
 - logo
 - readme
   - defines every env files
+- Better description for gems
+- Better description for gear

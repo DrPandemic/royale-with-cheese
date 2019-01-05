@@ -3,7 +3,7 @@ import {getIconURL} from "./graph";
 
 const regions = {
   eu: ["Kazzak", "Medivh", "Suramar"],
-  us: ["Medivh", "Exodar"],
+  us: ["Medivh", "Exodar", "Illidan"],
 };
 const recommendationContainer = document.getElementById("recommendation-box");
 

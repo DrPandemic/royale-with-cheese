@@ -54,6 +54,20 @@ defmodule Wow.Crawler do
     end
   end
 
+  @spec get_character(String.t, [{:character_name, String.t}, {:realm_name, String.t}, {:region, String.t}]) :: any
+  def get_character(access_token, character_name: character, realm_name: realm, region: region) do
+    client = Tesla.client(middlewares())
+    case Tesla.get(
+          client,
+          "https://#{region}.api.blizzard.com/wow/character/#{realm}/#{character}?locale=en_US&access_token=#{access_token}"
+        ) do
+      {:ok, %Tesla.Env{status: 200, body: body}} ->
+        body
+      {:ok, %Tesla.Env{status: 404}} ->
+        :not_found
+    end
+  end
+
   @spec middlewares() :: list
   defp middlewares do
     if Mix.env == :test do

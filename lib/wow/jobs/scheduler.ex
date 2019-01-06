@@ -10,6 +10,7 @@ defmodule Wow.Jobs.Scheduler do
     |> Enum.each(fn(info) -> toniq.enqueue(Wow.Jobs.Crawler, info) end)
 
     schedule_items()
+    schedule_characters()
 
     :ok
   end
@@ -20,6 +21,12 @@ defmodule Wow.Jobs.Scheduler do
     |> Enum.each(fn(item_id) -> toniq.enqueue(Wow.Jobs.ItemFetch, item_id: item_id) end)
 
     :ok
+  end
+
+  @spec schedule_characters :: :ok
+  def schedule_characters do
+    Wow.Character.find_no_faction
+    |> Enum.each(fn(character) -> Toniq.enqueue(Wow.Jobs.CharacterFetch, character_name: character.name, realm_name: character.realm.name, region: character.realm.region) end)
   end
 
   @spec schedule_item_icons(String.t) :: :ok | :err

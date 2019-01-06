@@ -1,4 +1,12 @@
 defmodule Wow.Character do
+  @moduledoc """
+  Represents a character.
+
+  faction:
+  0 = Alliance
+  1 = Horde
+  """
+
   alias Wow.Repo
   use Ecto.Schema
   import Ecto.Query, only: [from: 2]
@@ -7,9 +15,10 @@ defmodule Wow.Character do
   @type t :: Ecto.Schema.t
   @primary_key {:id, :id, autogenerate: true}
 
-  @derive {Jason.Encoder, only: [:id, :name, :bids, :realm, :realm_id]}
+  @derive {Jason.Encoder, only: [:id, :name, :faction, :bids, :realm, :realm_id]}
   schema "character" do
     field :name, :string
+    field :faction, :integer
     has_many :bids, Wow.AuctionBid
     belongs_to :realm, Wow.Realm
   end
@@ -17,7 +26,7 @@ defmodule Wow.Character do
   @spec changeset(Wow.Character.t, map) :: Ecto.Changeset.t
   def changeset(%Wow.Character{} = character, params \\ %{}) do
     character
-    |> cast(params, [:id, :name, :realm_id])
+    |> cast(params, [:id, :name, :faction, :realm_id])
     |> validate_required([:name, :realm_id])
     |> unique_constraint(:name_realm_id)
   end
@@ -42,5 +51,29 @@ defmodule Wow.Character do
     %Wow.Character{
       name: entry.owner,
     }
+  end
+
+  @spec find_by_name_realm(String.t, String.t, String.t) :: Wow.Character
+  def find_by_name_realm(name, realm, region) do
+    query = from c in Wow.Character,
+      left_join: r in Wow.Realm,
+      on: c.realm_id == r.id,
+      where: r.name == ^realm
+        and r.region == ^region
+        and c.name == ^name
+
+    Repo.one!(query)
+  end
+
+  @spec find_no_faction :: [Wow.Character]
+  def find_no_faction do
+    query = from c in Wow.Character,
+      left_join: r in Wow.Realm,
+      on: c.realm_id == r.id,
+      where: is_nil(c.faction),
+      preload: [:realm]
+
+    query
+    |> Repo.all
   end
 end

@@ -3,17 +3,21 @@ const defaultFormat = {
   type: "box",
   jitter: 0.3,
   pointpos: -1.5,
+  showlegend: false,
 };
 const defaultMarker = {
-  color: "rgb(8,81,156)",
+  // color: "rgb(212, 0, 0)",
+  color: "rgb(20, 69, 135)",
 };
 const lineFormat = {
   line: {
-    color: "rgb(253, 42, 42)",
+    color: "rgb(72, 64, 93)",
     width: 1.5
   },
   mode: "lines",
   name: "median",
+  showlegend: false,
+  hoverinfo: "none",
 };
 
 export function boxplot7D(entries, format, unit) {

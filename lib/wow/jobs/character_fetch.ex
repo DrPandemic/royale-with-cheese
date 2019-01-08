@@ -16,7 +16,13 @@ defmodule Wow.Jobs.CharacterFetch do
 
       case Crawler.get_access_token(id, secret) |> Crawler.get_character(options) do
         :not_found ->
-          IO.puts "Skipped #{character_name}"
+          character = Ecto.Changeset.change(character, not_found: true)
+          case Repo.update(character) do
+            {:ok, _}       ->
+              IO.puts "#{character_name} not found!"
+            {:error, _}    ->
+              IO.puts "Failed to update not found #{character_name}"
+          end
           :ok
         raw ->
           character = Ecto.Changeset.change(character, faction: Map.get(raw, "faction"))

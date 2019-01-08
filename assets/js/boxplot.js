@@ -17,7 +17,7 @@ const lineFormat = {
   mode: "lines",
   name: "median",
   showlegend: false,
-  hoverinfo: "none",
+  hoverinfo: "skip",
 };
 
 export function boxplot7D(entries, format, unit) {

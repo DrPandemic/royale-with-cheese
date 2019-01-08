@@ -19,6 +19,7 @@ defmodule Wow.Character do
   schema "character" do
     field :name, :string
     field :faction, :integer
+    field :not_found, :boolean
     has_many :bids, Wow.AuctionBid
     belongs_to :realm, Wow.Realm
   end
@@ -35,7 +36,7 @@ defmodule Wow.Character do
   def insert(%Wow.Character{} = character, attrs \\ %{}) do
     {:ok, result} = character
     |> changeset(attrs)
-    |> Repo.insert(returning: true, on_conflict: :replace_all_except_primary_key, conflict_target: [:name, :realm_id])
+    |> Repo.insert(returning: true, on_conflict: :nothing, conflict_target: [:name, :realm_id])
 
     result
   end
@@ -70,7 +71,8 @@ defmodule Wow.Character do
     query = from c in Wow.Character,
       left_join: r in Wow.Realm,
       on: c.realm_id == r.id,
-      where: is_nil(c.faction),
+      where: is_nil(c.faction)
+        and c.not_found == false,
       preload: [:realm]
 
     query

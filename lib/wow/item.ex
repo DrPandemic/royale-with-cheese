@@ -54,7 +54,7 @@ defmodule Wow.Item do
     |> validate_required([:id, :name, :icon, :buy_price, :sell_price, :is_auctionable,
       :item_level, :required_level, :quality, :blob])
     |> validate_not_nil([:description])
-    |> unique_constraint(:item_item_name_gin_index_index)
+    |> unique_constraint(:name)
   end
 
   @spec from_raw(raw_entry) :: t

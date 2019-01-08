@@ -1,24 +1,28 @@
 defmodule Wow.Jobs.Scheduler do
   @spec schedule :: :ok
-  def schedule(toniq \\ Toniq) do
-    [
-      [region: "eu", realm: "kazzak"],
-      [region: "eu", realm: "medivh"],
-      [region: "us", realm: "medivh"],
-      [region: "us", realm: "illidan"],
-    ]
-    |> Enum.each(fn(info) -> toniq.enqueue(Wow.Jobs.Crawler, info) end)
-
+  def schedule do
+    schedule_dumps()
     schedule_items()
     schedule_characters()
 
     :ok
   end
 
+  @spec schedule_dumps :: :ok
+  def schedule_dumps do
+    [
+      [region: "eu", realm: "kazzak"],
+      [region: "eu", realm: "medivh"],
+      [region: "us", realm: "medivh"],
+      [region: "us", realm: "illidan"],
+    ]
+    |> Enum.each(fn(info) -> Toniq.enqueue(Wow.Jobs.Crawler, info) end)
+  end
+
   @spec schedule_items :: :ok
-  def schedule_items(toniq \\ Toniq) do
+  def schedule_items do
     Wow.Item.find_missing_items
-    |> Enum.each(fn(item_id) -> toniq.enqueue(Wow.Jobs.ItemFetch, item_id: item_id) end)
+    |> Enum.each(fn(item_id) -> Toniq.enqueue(Wow.Jobs.ItemFetch, item_id: item_id) end)
 
     :ok
   end

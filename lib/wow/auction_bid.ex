@@ -41,7 +41,7 @@ defmodule Wow.AuctionBid do
   def insert(%Wow.AuctionBid{} = bid, attrs \\ %{}) do
     {:ok, result} = bid
     |> changeset(attrs)
-    |> Repo.insert(returning: true, on_conflict: {:replace, [:last_dump_timestamp, :last_time_left, :bid]}, conflict_target: :id)
+    |> Repo.insert(returning: true, on_conflict: {:replace, [:last_dump_timestamp, :last_time_left, :bid, :character_id]}, conflict_target: :id)
 
     result
   end
@@ -72,11 +72,13 @@ defmodule Wow.AuctionBid do
   defp find_by_item_id(item_id, region, realm, start_date) do
     query = from entry in Wow.AuctionBid,
       inner_join: r in assoc(entry, :realm),
+      inner_join: c in assoc(entry, :character),
       where: entry.item_id == ^item_id
         and r.name == ^realm
         and r.region == ^region
-        and entry.first_dump_timestamp > ^start_date,
-      select: {entry.first_dump_timestamp, entry.buyout, entry.quantity}
+        and entry.first_dump_timestamp > ^start_date
+        and not is_nil(c.faction),
+      select: {entry.first_dump_timestamp, entry.buyout, entry.quantity, c.faction}
 
     query
     |> Repo.all

@@ -8,19 +8,19 @@ defmodule Wow.AuctionEntry do
     @moduledoc """
     Used to carry the smallest usable subset of an entry.
     """
-    @derive {Jason.Encoder, only: [:dump_timestamp, :quantity, :buyout]}
-    defstruct dump_timestamp: nil, quantity: 0, buyout: 0
+    @derive {Jason.Encoder, only: [:dump_timestamp, :quantity, :buyout, :faction]}
+    defstruct dump_timestamp: nil, quantity: 0, buyout: 0, faction: nil
 
     @spec tuple_to_subset([[]]) :: [%Wow.AuctionEntry.Subset{}]
     def list_to_subset(result) do
-      Enum.map(result, fn([dump, buyout, quantity]) ->
-        %Wow.AuctionEntry.Subset{dump_timestamp: dump, buyout: buyout, quantity: quantity}
+      Enum.map(result, fn([dump, buyout, quantity, faction]) ->
+        %Wow.AuctionEntry.Subset{dump_timestamp: dump, buyout: buyout, quantity: quantity, faction: faction}
       end)
     end
 
     @spec tuple_to_subset([[]]) :: [%Wow.AuctionEntry.Subset{}]
     def tuple_to_subset(result) do
-      Enum.map(result, fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2)} end)
+      Enum.map(result, fn(e) -> %Wow.AuctionEntry.Subset{dump_timestamp: elem(e, 0), buyout: elem(e, 1), quantity: elem(e, 2), faction: elem(e, 3)} end)
     end
   end
 

@@ -6,7 +6,6 @@ defmodule Wow.AuctionBid do
 
   alias Wow.Repo
   use Ecto.Schema
-  use Memoize
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
@@ -107,35 +106,42 @@ defmodule Wow.AuctionBid do
                                     description: String.t,
                                     count: integer
                                  }]
-  defmemo most_expensive_items, expires_in: 30 * 60 * 1000 do
-    lower = Timex.now |> Timex.shift(hours: -24)
-    upper = Timex.now
-    query = from entry in Wow.AuctionBid,
-      inner_join: item in assoc(entry, :item),
-      where: entry.first_dump_timestamp > ^lower
-        and entry.first_dump_timestamp <= ^upper,
-      having: count(entry.item_id) > 50,
-      limit: 3,
-      order_by: [desc: fragment("median(buyout / quantity)::bigint")],
-      group_by: [item.id, item.name, item.icon],
-      select: {
-        item.id,
-        item.name,
-        item.icon,
-        fragment("median(buyout / quantity)::bigint"),
-        item.sell_price,
-        item.item_level,
-        item.required_level,
-        item.quality,
-        item.description,
-        count(item.id)
-      }
+  def most_expensive_items do
+    key = "model.auction_bid.most_expensive"
+    case Cachex.get(:wow_cache, key) do
+      {:ok, nil} ->
+        lower = Timex.now |> Timex.shift(hours: -24)
+        upper = Timex.now
+        query = from entry in Wow.AuctionBid,
+          inner_join: item in assoc(entry, :item),
+          where: entry.first_dump_timestamp > ^lower
+            and entry.first_dump_timestamp <= ^upper,
+          having: count(entry.item_id) > 50,
+          limit: 3,
+          order_by: [desc: fragment("median(buyout / quantity)::bigint")],
+          group_by: [item.id, item.name, item.icon],
+          select: {
+            item.id,
+            item.name,
+            item.icon,
+            fragment("median(buyout / quantity)::bigint"),
+            item.sell_price,
+            item.item_level,
+            item.required_level,
+            item.quality,
+            item.description,
+            count(item.id)
+          }
 
-    query
-    |> Repo.all
-    |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
-      %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
-    end)
+        response = query
+        |> Repo.all
+        |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
+          %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
+        end)
+        Cachex.put(:wow_cache, key, response, ttl: :timer.minutes(30))
+        response
+      {:ok, response} -> response
+    end
   end
 
   @spec most_present_items :: [%{
@@ -150,33 +156,40 @@ defmodule Wow.AuctionBid do
                                   description: String.t,
                                   count: integer
                                }]
-  defmemo most_present_items, expires_in: 30 * 60 * 1000 do
-    lower = Timex.now |> Timex.shift(hours: -24)
-    upper = Timex.now
-    query = from entry in Wow.AuctionBid,
-      inner_join: item in assoc(entry, :item),
-      where: entry.first_dump_timestamp > ^lower
-    and entry.first_dump_timestamp <= ^upper,
-      limit: 3,
-      order_by: [desc: count(item.id)],
-      group_by: [item.id, item.name, item.icon],
-      select: {
-        item.id,
-        item.name,
-        item.icon,
-        fragment("median(buyout / quantity)::bigint"),
-        item.sell_price,
-        item.item_level,
-        item.required_level,
-        item.quality,
-        item.description,
-        count(item.id)
-      }
+  def most_present_items do
+    key = "model.auction_bid.most_present_item"
+    case Cachex.get(:wow_cache, key) do
+      {:ok, nil} ->
+        lower = Timex.now |> Timex.shift(hours: -24)
+        upper = Timex.now
+        query = from entry in Wow.AuctionBid,
+          inner_join: item in assoc(entry, :item),
+          where: entry.first_dump_timestamp > ^lower
+        and entry.first_dump_timestamp <= ^upper,
+          limit: 3,
+          order_by: [desc: count(item.id)],
+          group_by: [item.id, item.name, item.icon],
+          select: {
+            item.id,
+            item.name,
+            item.icon,
+            fragment("median(buyout / quantity)::bigint"),
+            item.sell_price,
+            item.item_level,
+            item.required_level,
+            item.quality,
+            item.description,
+            count(item.id)
+          }
 
-    query
-    |> Repo.all
-    |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
-      %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
-    end)
+        response = query
+        |> Repo.all
+        |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
+          %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
+        end)
+        Cachex.put(:wow_cache, key, response, ttl: :timer.minutes(30))
+        response
+      {:ok, response} -> response
+    end
   end
 end

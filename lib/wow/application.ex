@@ -4,6 +4,7 @@ defmodule Wow.Application do
   @moduledoc false
 
   use Application
+  import Supervisor.Spec
 
   def start(_type, _args) do
     # List all child processes to be supervised
@@ -14,7 +15,8 @@ defmodule Wow.Application do
       WowWeb.Endpoint,
       # Starts a worker by calling: Wow.Worker.start_link(arg)
       # {Wow.Worker, arg},
-      Wow.Scheduler
+      Wow.Scheduler,
+      worker(Cachex, [:wow_cache, []]),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

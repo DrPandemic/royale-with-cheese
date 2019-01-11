@@ -5,7 +5,6 @@ defmodule Wow.Item do
 
   alias Wow.Repo
   use Ecto.Schema
-  use Memoize
   import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
@@ -106,12 +105,19 @@ defmodule Wow.Item do
   end
 
   @spec find_similar_to_name(String.t) :: [t]
-  defmemo find_similar_to_name(item_name), expires_in: 60 * 60 * 1000 do
-    query = from i in Wow.Item,
-      order_by: fragment("similarity(name, ?) DESC", ^String.downcase(item_name)),
-      limit: 10
+  def find_similar_to_name(item_name) do
+    key = "model.item.find_similar_to_name.#{item_name}"
+    case Cachex.get(:wow_cache, key) do
+      {:ok, nil} ->
+        query = from i in Wow.Item,
+          order_by: fragment("similarity(name, ?) DESC", ^String.downcase(item_name)),
+          limit: 10
 
-    Repo.all(query)
+        response = Repo.all(query)
+        Cachex.put(:wow_cache, key, response, ttl: :timer.minutes(60))
+        response
+      {:ok, response} -> response
+    end
   end
 
   @spec find_distinct_icons :: [String.t]

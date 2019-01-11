@@ -38,7 +38,7 @@ defmodule Wow.Character do
     |> changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: :nothing, conflict_target: [:name, :realm_id])
 
-    result
+    find_by_realm_id(character.name, character.realm_id)
   end
 
   @spec from_entries([Wow.AuctionEntry]) :: [Wow.Character]
@@ -61,6 +61,15 @@ defmodule Wow.Character do
       on: c.realm_id == r.id,
       where: r.name == ^realm
         and r.region == ^region
+        and c.name == ^name
+
+    Repo.one!(query)
+  end
+
+  @spec find_by_realm_id(String.t, integer) :: Wow.Character
+  def find_by_realm_id(name, realm_id) do
+    query = from c in Wow.Character,
+      where: c.realm_id == ^realm_id
         and c.name == ^name
 
     Repo.one!(query)

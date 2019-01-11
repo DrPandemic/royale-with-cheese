@@ -27,9 +27,9 @@ defmodule Wow.Realm do
   def insert(%Wow.Realm{} = realm, attrs \\ %{}) do
     {:ok, result} = realm
     |> changeset(attrs)
-    |> Repo.insert(returning: true, on_conflict: :replace_all_except_primary_key, conflict_target: [:name, :region])
+    |> Repo.insert(returning: true, on_conflict: :nothing, conflict_target: [:name, :region])
 
-    result
+    find(realm.name, realm.region)
   end
 
   @spec from_entries([Wow.AuctionEntry]) :: [Wow.Realm]
@@ -44,5 +44,14 @@ defmodule Wow.Realm do
       name: entry.owner_realm,
       region: entry.region,
     }
+  end
+
+  @spec find(String.t, String.t) :: Wow.Realm
+  def find(name, region) do
+    query = from r in Wow.Realm,
+      where: r.region == ^region
+        and r.name == ^name
+
+    Repo.one!(query)
   end
 end

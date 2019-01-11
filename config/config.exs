@@ -30,7 +30,7 @@ config :phoenix, :json_library, Jason
 import_config "#{Mix.env()}.exs"
 
 # Tesla
-config :tesla, :adapter, Tesla.Adapter.Ibrowse
+config :tesla, :adapter, Tesla.Adapter.Hackney
 
 # Quantum
 config :wow, Wow.Scheduler,

@@ -1,3 +1,4 @@
+- Stop incrementing the realm ids
 - Split between horde and alliance
 - After 2 days up, the server was hanging on home
   - Opened remote conenctions

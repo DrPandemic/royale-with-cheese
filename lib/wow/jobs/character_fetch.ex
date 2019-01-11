@@ -13,28 +13,36 @@ defmodule Wow.Jobs.CharacterFetch do
       character = Character.find_by_name_realm(character_name, realm, region)
       id = System.get_env("BLIZZARD_CLIENT_ID")
       secret = System.get_env("BLIZZARD_CLIENT_SECRET")
+      try do
+        case Crawler.get_access_token(id, secret) |> Crawler.get_character(options) do
+          :not_found ->
+            character_not_found(character)
+          raw ->
+            character = Ecto.Changeset.change(character, faction: Map.get(raw, "faction"))
+            case Repo.update(character) do
+              {:ok, _}       ->
+                IO.puts "Done with #{character_name}"
+              {:error, _}    ->
+                IO.puts "Failed to update #{character_name}"
+            end
 
-      case Crawler.get_access_token(id, secret) |> Crawler.get_character(options) do
-        :not_found ->
-          character = Ecto.Changeset.change(character, not_found: true)
-          case Repo.update(character) do
-            {:ok, _}       ->
-              IO.puts "#{character_name} not found!"
-            {:error, _}    ->
-              IO.puts "Failed to update not found #{character_name}"
-          end
-          :ok
-        raw ->
-          character = Ecto.Changeset.change(character, faction: Map.get(raw, "faction"))
-          case Repo.update(character) do
-            {:ok, _}       ->
-              IO.puts "Done with #{character_name}"
-            {:error, _}    ->
-              IO.puts "Failed to update #{character_name}"
-          end
-
-          :ok
+            :ok
+        end
+      rescue
+        ArgumentError -> character_not_found(character)
       end
     end)
+  end
+
+  @spec character_not_found(Wow.Character) :: :ok
+  def character_not_found(character) do
+    character = Ecto.Changeset.change(character, not_found: true)
+    case Repo.update(character) do
+      {:ok, _}       ->
+        IO.puts "#{character.name} not found!"
+      {:error, _}    ->
+        IO.puts "Failed to update not found #{character.name}"
+    end
+    :ok
   end
 end

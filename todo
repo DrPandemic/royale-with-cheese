@@ -1,4 +1,5 @@
 - Split between horde and alliance
+- Improve speed on home when cache is cold
 - After 2 days up, the server was hanging on home
   - Opened remote conenctions
 - Analyze tendencies between weekdays

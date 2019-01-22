@@ -23,7 +23,7 @@ export async function displayGraph() {
     break;
   }
 
-  Plotly.newPlot('boxplot-chart', data, layout);
+  Plotly.newPlot("boxplot-chart", data, layout);
   document.getElementById("loading-icon").classList.add("invisible");
 }
 

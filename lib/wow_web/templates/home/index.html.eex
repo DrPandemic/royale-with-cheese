@@ -1,21 +1,13 @@
 <div class="home-container">
   <div>
     <h1>Most expensive items in the last day</h1>
-    <%= Enum.map(@most_expensive_items, fn item -> %>
-      <wow-item
-        item="<%= Phoenix.json_library.encode_to_iodata!(item) %>"
-        text="It was sold <b><%= item.count %></b> times at an median price of <gold-price value='<%= item.price %>' text='false' />.">
-      </wow-item>
-    <% end) %>
+    <i class="loading-icon" id="loading-expensive"></i>
+    <span id="expensive"></span>
   </div>
   <div>
     <h1>Most present items in the last day</h1>
-    <%= Enum.map(@most_present_items, fn item -> %>
-      <wow-item
-        item="<%= Phoenix.json_library.encode_to_iodata!(item) %>"
-        text="It was sold <b><%= item.count %></b> times at an median price of <gold-price value='<%= item.price %>' text='false' />.">
-      </wow-item>
-    <% end) %>
+    <i class="loading-icon" id="loading-present"></i>
+    <span id="present"></span>
   </div>
 </div>
 

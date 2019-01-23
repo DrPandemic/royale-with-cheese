@@ -25,5 +25,8 @@ defmodule WowWeb.Router do
 
     get "/items", ItemController, :show_json
     get "/items/find", ItemController, :find
+
+    get "/home/present", HomeController, :present
+    get "/home/expensive", HomeController, :expensive
   end
 end

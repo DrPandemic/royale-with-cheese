@@ -25,6 +25,5 @@ RUN MIX_ENV=prod mix compile
 COPY assets/ ./assets/
 COPY priv/ ./priv/
 
-RUN cd assets && npm install && npm run deploy
+RUN cd assets && npm install && npm run deploy && rm -rf assests/node_modules
 RUN MIX_ENV=prod mix phx.digest
-RUN rm -rf assests/node_modules

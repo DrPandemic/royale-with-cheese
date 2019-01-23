@@ -27,7 +27,7 @@ export async function displayGraph() {
   document.getElementById("loading-icon").classList.add("invisible");
 }
 
-function redirectToIndex() {
+export function redirectToIndex() {
   if (window.location.pathname !== "/") {
     window.location.href = "/";
   }
@@ -60,7 +60,6 @@ function showItemInfo(result) {
   } else {
     info.setAttribute("text", `${result.entries.data.length} auction entries were analyzed. They were randomly sampled from ${result.entries.initial_count} entries.`);
   }
-
 }
 
 export function getIconURL(icon) {

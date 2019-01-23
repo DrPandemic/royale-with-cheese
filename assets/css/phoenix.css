@@ -247,3 +247,6 @@ input.search-box {
 .invisible {
   visibility: hidden;
 }
+.display-none {
+  display: none;
+}

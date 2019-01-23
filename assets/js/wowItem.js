@@ -96,11 +96,11 @@ style.textContent = `
 }
 `;
 
-class WowItem extends HTMLElement {
-  constructor() {
+export class WowItem extends HTMLElement {
+  constructor(item = {}, text = "") {
     super();
-    this.item = {};
-    this.text = "";
+    this.item = item;
+    this.text = text;
     this.gotoItem = this.gotoItem.bind(this);
     this.render = this.render.bind(this);
   }
@@ -121,7 +121,10 @@ class WowItem extends HTMLElement {
   }
 
   render() {
-    this.item = JSON.parse(this.getAttribute("item")) || this.icon;
+    if (!this.item.id) {
+      this.item = JSON.parse(this.getAttribute("item"));
+    }
+
     if (Object.keys(this.item).length === 0) {
       return;
     }

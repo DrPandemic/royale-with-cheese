@@ -94,18 +94,7 @@ defmodule Wow.AuctionBid do
     }
   end
 
-  @spec most_expensive_items :: [%{
-                                    id: integer,
-                                    name: String.t,
-                                    icon: String.t,
-                                    price: float,
-                                    sell_price: integer,
-                                    item_level: integer,
-                                    required_level: integer,
-                                    quality: integer,
-                                    description: String.t,
-                                    count: integer
-                                 }]
+  @spec most_expensive_items :: [Wow.Item.ItemWithCount]
   def most_expensive_items do
     key = "model.auction_bid.most_expensive"
     case Cachex.get(:wow_cache, key) do
@@ -135,27 +124,14 @@ defmodule Wow.AuctionBid do
 
         response = query
         |> Repo.all
-        |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
-          %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
-        end)
+        |> Enum.map(&Wow.Item.ItemWithCount.tuple_to_subset/1)
         Cachex.put(:wow_cache, key, response, ttl: :timer.minutes(30))
         response
       {:ok, response} -> response
     end
   end
 
-  @spec most_present_items :: [%{
-                                  id: integer,
-                                  name: String.t,
-                                  icon: String.t,
-                                  price: float,
-                                  sell_price: integer,
-                                  item_level: integer,
-                                  required_level: integer,
-                                  quality: integer,
-                                  description: String.t,
-                                  count: integer
-                               }]
+  @spec most_present_items :: [Wow.Item.ItemWithCount]
   def most_present_items do
     key = "model.auction_bid.most_present_item"
     case Cachex.get(:wow_cache, key) do
@@ -184,9 +160,7 @@ defmodule Wow.AuctionBid do
 
         response = query
         |> Repo.all
-        |> Enum.map(fn ({id, name, icon, price, sell_price, item_level, required_level, quality, description, count}) ->
-          %{id: id, name: name, icon: icon, price: price, sell_price: sell_price, item_level: item_level, required_level: required_level, quality: quality, description: description, count: count}
-        end)
+        |> Enum.map(&Wow.Item.ItemWithCount.tuple_to_subset/1)
         Cachex.put(:wow_cache, key, response, ttl: :timer.minutes(30))
         response
       {:ok, response} -> response

@@ -3,6 +3,30 @@ defmodule Wow.Item do
   Represent an item. They can by searched by id or by name.
   """
 
+  defmodule ItemWithCount do
+    @moduledoc """
+    A superset of items with quantity and median.
+    """
+    @derive Jason.Encoder
+    defstruct id: 0, name: '', icon: '', price: 0, sell_price: 0, item_level: 0, required_level: 0, quality: 0, description: '', count: 0
+
+    @spec tuple_to_subset([[]]) :: [%Wow.Item.ItemWithCount{}]
+    def tuple_to_subset(e) do
+      %Wow.Item.ItemWithCount{
+        id: elem(e, 0),
+        name: elem(e, 1),
+        icon: elem(e, 2),
+        price: elem(e, 3),
+        sell_price: elem(e, 4),
+        item_level: elem(e, 5),
+        required_level: elem(e, 6),
+        quality: elem(e, 7),
+        description: elem(e, 8),
+        count: elem(e, 9)
+      }
+    end
+  end
+
   alias Wow.Repo
   use Ecto.Schema
   import Ecto.Query, only: [from: 2]

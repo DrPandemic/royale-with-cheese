@@ -11,6 +11,7 @@ defmodule Wow.AuctionBid do
 
   @type raw_entry :: %{optional(String.t) => String.t}
   @type t :: Ecto.Schema.t
+  @bid_ttl_in_days 32
 
   @derive {Jason.Encoder, only: [:id, :item_id, :buyout, :quantity, :rand, :context,
     :timestamps, :realm, :character, :realm_id, :character_id]}
@@ -165,5 +166,13 @@ defmodule Wow.AuctionBid do
         response
       {:ok, response} -> response
     end
+  end
+
+  @spec delete_old :: {integer(), nil | [term()]}
+  def delete_old do
+    limit = Timex.now |> Timex.shift(hours: -24 * @bid_ttl_in_days)
+    (from bid in Wow.AuctionBid,
+      where: bid.last_dump_timestamp < ^limit)
+    |> Repo.delete_all
   end
 end

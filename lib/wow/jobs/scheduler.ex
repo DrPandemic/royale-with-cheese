@@ -4,6 +4,8 @@ defmodule Wow.Jobs.Scheduler do
     schedule_dumps()
     schedule_items()
     schedule_characters()
+    schedule_item_icons("36")
+    clean_old_bids()
 
     :ok
   end
@@ -49,5 +51,11 @@ defmodule Wow.Jobs.Scheduler do
   defp downloaded_icons(size) do
     Path.wildcard("./assets/static/images/blizzard/icons/#{size}/*.jpg")
     |> Enum.map(fn name -> Regex.run(~r/.*\/(.*).jpg$/, name) |> List.last end)
+  end
+
+  @spec clean_old_bids :: :ok
+  def clean_old_bids do
+    Wow.AuctionBid.delete_old
+    :ok
   end
 end

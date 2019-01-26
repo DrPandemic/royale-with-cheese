@@ -7,10 +7,23 @@ defmodule Wow.Item do
     @moduledoc """
     A superset of items with quantity and median.
     """
+    @type t :: %__MODULE__{
+      id: non_neg_integer,
+      name: String.t,
+      icon: String.t,
+      price: non_neg_integer,
+      sell_price: non_neg_integer,
+      item_level: non_neg_integer,
+      required_level: non_neg_integer,
+      quality: non_neg_integer,
+      description: String.t,
+      count: non_neg_integer
+    }
+
     @derive Jason.Encoder
     defstruct id: 0, name: '', icon: '', price: 0, sell_price: 0, item_level: 0, required_level: 0, quality: 0, description: '', count: 0
 
-    @spec tuple_to_subset([[]]) :: [%Wow.Item.ItemWithCount{}]
+    @spec tuple_to_subset(tuple) :: t
     def tuple_to_subset(e) do
       %Wow.Item.ItemWithCount{
         id: elem(e, 0),
@@ -106,7 +119,7 @@ defmodule Wow.Item do
     end
   end
 
-  @spec find(integer) :: t
+  @spec find(non_neg_integer) :: t
   def find(item_id) do
     query = from entry in Wow.Item,
       where: entry.item == ^item_id
@@ -114,7 +127,7 @@ defmodule Wow.Item do
     Repo.one(query)
   end
 
-  @spec find_missing_items() :: [integer]
+  @spec find_missing_items() :: [non_neg_integer]
   def find_missing_items do
     query = from e in Wow.AuctionBid,
       distinct: e.item_id,

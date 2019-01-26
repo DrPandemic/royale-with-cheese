@@ -39,6 +39,7 @@ defmodule Wow.Jobs.CharacterFetch do
       {:error, _}    ->
         IO.puts "Failed to update not found #{character.name}"
     end
+
     :ok
   end
 end

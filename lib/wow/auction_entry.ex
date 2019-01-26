@@ -1,13 +1,19 @@
 defmodule Wow.AuctionEntry do
   alias Wow.Repo
   use Ecto.Schema
-  import Ecto.Query, only: [from: 2]
   import Ecto.Changeset
 
   defmodule Subset do
     @moduledoc """
     Used to carry the smallest usable subset of an entry.
     """
+    @type t :: %__MODULE__{
+      dump_timestamp: DateTime.t,
+      quantity: non_neg_integer,
+      buyout: non_neg_integer,
+      faction: 0 | 1
+    }
+
     @derive {Jason.Encoder, only: [:dump_timestamp, :quantity, :buyout, :faction]}
     defstruct dump_timestamp: nil, quantity: 0, buyout: 0, faction: nil
 
@@ -67,7 +73,7 @@ defmodule Wow.AuctionEntry do
     |> unique_constraint(:auc_id_dump_timestamp_owner_realm_region)
   end
 
-  @spec from_raw(raw_entry, integer, String.t) :: t
+  @spec from_raw(raw_entry, non_neg_integer, String.t) :: t
   def from_raw(auction, timestamp, region) do
     %Wow.AuctionEntry{
       auc_id: auction["auc"],
@@ -84,42 +90,5 @@ defmodule Wow.AuctionEntry do
       context: auction["context"],
       dump_timestamp: timestamp |> DateTime.from_unix!(:millisecond) |> DateTime.truncate(:second)
     }
-  end
-
-  @spec find_by_item_id(integer, String.t, String.t, DateTime.t) :: [Wow.AuctionEntry.Subset]
-  defp find_by_item_id(item_id, region, realm, start_date) do
-    query = from entry in Wow.AuctionEntry,
-      where: entry.item == ^item_id
-        and entry.owner_realm == ^realm
-        and entry.region == ^region
-        and entry.dump_timestamp > ^start_date,
-      select: {min(entry.dump_timestamp), entry.buyout, entry.quantity},
-      group_by: [:buyout, :quantity]
-
-    query
-    |> Repo.all
-    |> Wow.AuctionEntry.Subset.tuple_to_subset
-  end
-
-  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer, DateTime.t) :: [t]
-  def find_by_item_id_with_sampling(item_id, region, realm, max, start_date) do
-    result = find_by_item_id(item_id, region, realm, start_date)
-    :rand.seed(:exsplus, {1, 2, 3})
-    %{
-      initial_count: length(result),
-      data: result |> Enum.take_random(max)
-    }
-  end
-
-  @spec find_firsts(integer) :: [%Wow.AuctionEntry{}]
-  def find_firsts(limit) do
-    from(e in Wow.AuctionEntry, limit: ^limit)
-    |> Repo.all
-  end
-
-  @spec delete_by_id(integer) :: :ok
-  def delete_by_id(id) do
-    from(e in Wow.AuctionEntry, where: e.id == ^id)
-    |> Repo.delete_all
   end
 end

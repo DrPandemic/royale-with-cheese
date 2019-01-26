@@ -23,9 +23,9 @@ defmodule Wow.Realm do
     |> unique_constraint(:name_region)
   end
 
-  @spec insert(Wow.Realm, map) :: t
+  @spec insert(t, map) :: t
   def insert(%Wow.Realm{} = realm, attrs \\ %{}) do
-    {:ok, result} = realm
+    {:ok, _} = realm
     |> changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: :nothing, conflict_target: [:name, :region])
 
@@ -38,7 +38,7 @@ defmodule Wow.Realm do
     |> Enum.map(&Wow.Realm.from_entry/1)
   end
 
-  @spec from_entry(Wow.AuctionEntry) :: Wow.Realm
+  @spec from_entry(Wow.AuctionEntry.t) :: t
   def from_entry(entry) do
     %Wow.Realm{
       name: entry.owner_realm,
@@ -46,7 +46,7 @@ defmodule Wow.Realm do
     }
   end
 
-  @spec find(String.t, String.t) :: Wow.Realm
+  @spec find(String.t, String.t) :: t
   def find(name, region) do
     query = from r in Wow.Realm,
       where: r.region == ^region

@@ -24,7 +24,7 @@ defmodule Wow.Character do
     belongs_to :realm, Wow.Realm
   end
 
-  @spec changeset(Wow.Character.t, map) :: Ecto.Changeset.t
+  @spec changeset(t, map) :: Ecto.Changeset.t
   def changeset(%Wow.Character{} = character, params \\ %{}) do
     character
     |> cast(params, [:id, :name, :faction, :realm_id])
@@ -32,29 +32,29 @@ defmodule Wow.Character do
     |> unique_constraint(:name_realm_id)
   end
 
-  @spec insert(Wow.AuctionBid, map) :: t
+  @spec insert(t, map) :: t
   def insert(%Wow.Character{} = character, attrs \\ %{}) do
-    {:ok, result} = character
+    {:ok, _} = character
     |> changeset(attrs)
     |> Repo.insert(returning: true, on_conflict: :nothing, conflict_target: [:name, :realm_id])
 
     find_by_realm_id(character.name, character.realm_id)
   end
 
-  @spec from_entries([Wow.AuctionEntry]) :: [Wow.Character]
+  @spec from_entries([Wow.AuctionEntry.t]) :: [t]
   def from_entries(entries) do
     entries
     |> Enum.map(&Wow.Character.from_entry/1)
   end
 
-  @spec from_entry(Wow.AuctionEntry) :: Wow.Character
+  @spec from_entry(Wow.AuctionEntry.t) :: t
   def from_entry(entry) do
     %Wow.Character{
       name: entry.owner,
     }
   end
 
-  @spec find_by_name_realm(String.t, String.t, String.t) :: Wow.Character
+  @spec find_by_name_realm(String.t, String.t, String.t) :: t
   def find_by_name_realm(name, realm, region) do
     query = from c in Wow.Character,
       left_join: r in Wow.Realm,
@@ -66,7 +66,7 @@ defmodule Wow.Character do
     Repo.one!(query)
   end
 
-  @spec find_by_realm_id(String.t, integer) :: Wow.Character
+  @spec find_by_realm_id(String.t, non_neg_integer) :: t
   def find_by_realm_id(name, realm_id) do
     query = from c in Wow.Character,
       where: c.realm_id == ^realm_id
@@ -75,7 +75,7 @@ defmodule Wow.Character do
     Repo.one!(query)
   end
 
-  @spec find_no_faction :: [Wow.Character]
+  @spec find_no_faction :: [t]
   def find_no_faction do
     query = from c in Wow.Character,
       left_join: r in Wow.Realm,

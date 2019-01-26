@@ -55,7 +55,8 @@ defmodule Wow.Jobs.Scheduler do
 
   @spec clean_old_bids :: :ok
   def clean_old_bids do
-    Wow.AuctionBid.delete_old
+    {count, _} = Wow.AuctionBid.delete_old
+    IO.puts("#{count} bids were deleted")
     :ok
   end
 end

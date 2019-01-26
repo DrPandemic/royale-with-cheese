@@ -37,7 +37,7 @@ defmodule Wow.AuctionBid do
     |> unique_constraint(:id, name: :auction_bid_pkey)
   end
 
-  @spec insert(Wow.AuctionBid, map) :: t
+  @spec insert(Wow.AuctionBid.t, map) :: t
   def insert(%Wow.AuctionBid{} = bid, attrs \\ %{}) do
     {:ok, result} = bid
     |> changeset(attrs)
@@ -46,13 +46,13 @@ defmodule Wow.AuctionBid do
     result
   end
 
-  @spec from_entries([Wow.AuctionEntry]) :: [Wow.AuctionBid]
+  @spec from_entries([Wow.AuctionEntry.t]) :: [Wow.AuctionBid.t]
   def from_entries(entries) do
     entries
     |> Enum.map(&Wow.AuctionBid.from_entry/1)
   end
 
-  @spec from_entry(Wow.AuctionEntry) :: Wow.AuctionBid
+  @spec from_entry(Wow.AuctionEntry.t) :: Wow.AuctionBid.t
   def from_entry(e) do
     %Wow.AuctionBid{
       id: e.auc_id,
@@ -68,7 +68,7 @@ defmodule Wow.AuctionBid do
     }
   end
 
-  @spec find_by_item_id(integer, String.t, String.t, DateTime.t) :: [Wow.AuctionEntry.Subset]
+  @spec find_by_item_id(non_neg_integer, String.t, String.t, DateTime.t) :: [Wow.AuctionEntry.Subset.t]
   defp find_by_item_id(item_id, region, realm, start_date) do
     query = from entry in Wow.AuctionBid,
       inner_join: r in assoc(entry, :realm),
@@ -85,7 +85,7 @@ defmodule Wow.AuctionBid do
     |> Wow.AuctionEntry.Subset.tuple_to_subset
   end
 
-  @spec find_by_item_id_with_sampling(integer, String.t, String.t, integer, DateTime.t) :: [t]
+  @spec find_by_item_id_with_sampling(non_neg_integer, String.t, String.t, non_neg_integer, DateTime.t) :: %{data: [t], initial_count: non_neg_integer}
   def find_by_item_id_with_sampling(item_id, region, realm, max, start_date) do
     result = find_by_item_id(item_id, region, realm, start_date)
     :rand.seed(:exsplus, {1, 2, 3})

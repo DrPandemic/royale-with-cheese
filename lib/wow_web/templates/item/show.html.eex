@@ -8,6 +8,10 @@
   <i class="loading-icon" id="loading-icon"></i>
 </div>
 
+<span id="error" style="color: red" class="display-none">
+  There was an error. You can reload the page.
+</span>
+
 <wow-item
   id="item-info"
   item="{}"

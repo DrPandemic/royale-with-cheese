@@ -1,6 +1,6 @@
 defmodule Wow.Jobs.Crawler do
   import Wow.Helpers, only: [with_logs: 1]
-  use Toniq.Worker, max_concurrency: 1
+  use Toniq.Worker, max_concurrency: 3
 
   @spec perform([{:region, String.t} | {:realm, String.t}]) :: :ok
   def perform(region: region, realm: realm) do

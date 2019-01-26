@@ -1,6 +1,6 @@
 - Better description for gear
 - Better description for gems
-- Handle query timeout
+- Be sure character errors are not retried at every sync
 - Trend line
 - Link object to recipe/ingredients
 - Analyze tendencies between weekdays

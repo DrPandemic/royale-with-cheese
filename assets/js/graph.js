@@ -46,7 +46,7 @@ async function fetchData() {
   const realm = getUrlParam("realm");
   const itemName = getUrlParam("item_name");
   const params = qs.stringify({region: region, realm: realm, item_name: itemName, duration: getDuration()});
-  return fetch(`/api/items?${params}`).then(r => r.json()).catch(redirectToIndex);
+  return fetch(`/api/items?${params}`).then(r => r.json());
 }
 
 function showItemInfo(result) {

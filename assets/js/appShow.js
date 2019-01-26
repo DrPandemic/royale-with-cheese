@@ -9,7 +9,12 @@ document.getElementById("item-name").addEventListener("input", fillSearchRecomme
 document.getElementById("item-name").addEventListener("click", fillSearchRecommendation);
 document.getElementById("region").addEventListener("change", fillRealm);
 
-displayGraph();
+displayGraph().catch(e => {
+  console.error(e);
+  document.getElementById("error").classList.remove("display-none");
+  document.getElementById("loading-icon").classList.add("invisible");
+});
+
 document.getElementById("graph-duration").addEventListener("change", async () => { await displayGraph(); });
 
 document.getElementById("advanced-option-toggle").addEventListener("click", toggleAdvancedOptions);

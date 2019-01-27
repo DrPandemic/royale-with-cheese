@@ -120,6 +120,7 @@ defmodule Wow.AuctionBid do
             item.required_level,
             item.quality,
             item.description,
+            item.stats,
             count(item.id)
           }
 
@@ -156,6 +157,7 @@ defmodule Wow.AuctionBid do
             item.required_level,
             item.quality,
             item.description,
+            item.stats,
             count(item.id)
           }
 

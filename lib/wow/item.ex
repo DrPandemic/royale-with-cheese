@@ -17,11 +17,23 @@ defmodule Wow.Item do
       required_level: non_neg_integer,
       quality: non_neg_integer,
       description: String.t,
-      count: non_neg_integer
+      count: non_neg_integer,
+      stats: String.t
     }
 
     @derive Jason.Encoder
-    defstruct id: 0, name: '', icon: '', price: 0, sell_price: 0, item_level: 0, required_level: 0, quality: 0, description: '', count: 0
+    defstruct(id: 0,
+      name: '',
+      icon: '',
+      price: 0,
+      sell_price: 0,
+      item_level: 0,
+      required_level: 0,
+      quality: 0,
+      description: '',
+      count: 0,
+      stats: ''
+    )
 
     @spec tuple_to_subset(tuple) :: t
     def tuple_to_subset(e) do
@@ -35,7 +47,8 @@ defmodule Wow.Item do
         required_level: elem(e, 6),
         quality: elem(e, 7),
         description: elem(e, 8),
-        count: elem(e, 9)
+        stats: elem(e, 9),
+        count: elem(e, 10),
       }
     end
   end
@@ -49,7 +62,7 @@ defmodule Wow.Item do
   @type t :: Ecto.Schema.t
 
   @derive {Jason.Encoder, only: [:id, :name, :icon, :buy_price, :sell_price,
-    :is_auctionable, :item_level, :required_level, :quality, :description]}
+    :is_auctionable, :item_level, :required_level, :quality, :description, :stats]}
   schema "item" do
     field :name, :string
     field :icon, :string
@@ -60,6 +73,7 @@ defmodule Wow.Item do
     field :required_level, :integer
     field :quality, :integer
     field :description, :string
+    field :stats, :string
     field :blob, :map
 
     timestamps()
@@ -86,10 +100,10 @@ defmodule Wow.Item do
   def changeset(%Wow.Item{} = entry, params \\ %{}) do
     entry
     |> cast(params, [:id, :name, :icon, :buy_price, :sell_price, :is_auctionable,
-      :item_level, :required_level, :quality, :description, :blob])
+      :item_level, :required_level, :quality, :description, :stats, :blob])
     |> validate_required([:id, :name, :icon, :buy_price, :sell_price, :is_auctionable,
       :item_level, :required_level, :quality, :blob])
-    |> validate_not_nil([:description])
+    |> validate_not_nil([:description, :stats])
     |> unique_constraint(:name)
   end
 
@@ -106,16 +120,31 @@ defmodule Wow.Item do
       required_level: item["requiredLevel"],
       quality: item["quality"],
       description: get_description(item),
+      stats: get_stats(item),
       blob: item
     } |> changeset
   end
 
   @spec get_description(raw_entry) :: String.t
   defp get_description(item) do
-    if item["description"] != "" || (item |> Map.get("itemSpells", []) |> length) == 0 do
-      item["description"]
+    # Spells
+    if (item |> Map.get("itemSpells", []) |> length) > 0 do
+      (item["itemSpells"] |> hd |> Map.get("scaledDescription", ""))
     else
-      item["itemSpells"] |> hd |> Map.get("scaledDescription", "")
+      item["description"]
+    end
+  end
+
+  defp get_stats(item) do
+    # Gems
+    if Map.has_key?(item, "gemInfo") do
+      info = Map.fetch!(item, "gemInfo")
+      [
+        info |> Map.get("bonus") |> Map.get("name"),
+        "Requires item level #{Map.get(info, "minItemLevel", 0)}"
+      ] |> Enum.join("\n")
+    else
+      ""
     end
   end
 

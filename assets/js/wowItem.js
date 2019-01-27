@@ -11,7 +11,7 @@ template.innerHTML = `
   </span>
   <div id="tooltip" class="tooltip">
     <div id="t-name" class="t-name">foo</div>
-    <div id="t-item-level" class="t-item-level"></div>
+    <div id="t-stats"></div>
     <div id="t-description" class="t-item-level"></div>
     <div id="t-requires-level"></div>
     <gold-price id="t-price" value="0"></gold-price>
@@ -137,9 +137,11 @@ export class WowItem extends HTMLElement {
 
       this.shadowRoot.getElementById("t-name").classList.add(`quality-${this.item.quality}`);
       this.shadowRoot.getElementById("t-name").innerText = this.item.name;
-      this.shadowRoot.getElementById("t-item-level").innerText = `Item Level ${this.item.item_level}`;
       if (this.item.description !== "") {
         this.shadowRoot.getElementById("t-description").innerText = `"${this.item.description}"`;
+      }
+      if (this.item.stats !== "") {
+        this.shadowRoot.getElementById("t-stats").innerText = this.item.stats;
       }
       if (this.item.required_level > 0) {
         this.shadowRoot.getElementById("t-requires-level").innerText = `Requires level ${this.item.required_level}`;

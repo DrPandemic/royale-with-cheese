@@ -1,20 +1,16 @@
-# Wow
+# Royale With Cheese
 
-To start your Phoenix server:
+This is a small elixir web app. It let you track World of Warcraft auction house trends. The ojective is to help
+traders to buy and sell items at the right time.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+# Run
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Docker compose can be used to run all the backend.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+# Screenshots
 
-## Learn more
+Home page.
+![Home](screenshot/home.png)
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+A show page.
+![Show](screenshot/show.png)
